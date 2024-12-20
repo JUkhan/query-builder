@@ -1,0 +1,6 @@
+@visual_db_server_HostAddress = http://localhost:5278
+
+GET {{visual_db_server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

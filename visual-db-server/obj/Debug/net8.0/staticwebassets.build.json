@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "DD7RBINWD+IC4yRuv7pEOeO+r6NHDuk6th/NGRJTqC8=",
+  "Source": "visual-db-server",
+  "BasePath": "_content/visual-db-server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
