@@ -19,4 +19,8 @@ public interface ICustomDataSetCrudService
     object GetCustomDatasetByName(string datasetName);
     Task<CustomDataset> Insert(CustomDataset postModel);
     Task<dynamic> Update(CustomDataset postModel);
+
+    Task<IReadOnlyList<CustomDataset>> GetAll();
+
+    Task<CustomDataset> GetById(string id);
 }

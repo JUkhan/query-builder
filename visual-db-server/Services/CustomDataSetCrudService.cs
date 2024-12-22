@@ -43,7 +43,7 @@ public class CustomDataSetCrudService: ICustomDataSetCrudService
         {
             if (CanCreateTable(postModel))
             {
-                return await _repository.AddAsync(postModel);
+               return await _repository.AddAsync(postModel);
             }
 
             throw new CrudException("Table Creation failed");
@@ -105,6 +105,7 @@ public class CustomDataSetCrudService: ICustomDataSetCrudService
 
     private bool CanCreateTable(CustomDataset postModel)
     {
+        return true;
         var tableName = postModel.DatasetName!.ToLower();
 
         try
@@ -848,6 +849,16 @@ public class CustomDataSetCrudService: ICustomDataSetCrudService
             value = t,
             label = t
         }).ToList();
+    }
+
+    public async Task<IReadOnlyList<CustomDataset>> GetAll()
+    {
+        return await _repository.GetAllAsync();
+    }
+
+    public async Task<CustomDataset> GetById(string id)
+    {
+        return await _repository.GetByIdAsync(id);
     }
 }
 

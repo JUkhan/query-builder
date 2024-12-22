@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using chatApp.DB;
+using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using visual_db_server.Models;
 using visual_db_server.Services;
@@ -111,12 +112,44 @@ public class CustomDataSetController : BaseController
         return JsonNet(_customDataSetCrudService.GetSchemaList());
     }
 
+    [HttpGet("GetById/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetById(string id)
+    {
+        return JsonNet(await _customDataSetCrudService.GetById(id));
+    }
+
     [HttpPost("GetPreviewData")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult GetPreviewData(string query)
+    public IActionResult GetPreviewData(Preview preview)
     {
-        return JsonNet(_customDataSetCrudService.GetPreviewData(query));
+        return JsonNet(_customDataSetCrudService.GetPreviewData(preview.query));
+    }
+
+    [HttpPost("Insert")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async  Task<IActionResult> Insert(CustomDataset record)
+    {
+        return JsonNet(await _customDataSetCrudService.Insert(record));
+    }
+
+    [HttpGet("GetAll")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> GetAll()
+    {
+        return JsonNet(await _customDataSetCrudService.GetAll());
+    }
+
+    [HttpPost("Update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Update(CustomDataset record)
+    {
+        return JsonNet(await _customDataSetCrudService.Update(record));
     }
 
     [HttpGet("GetColumnList")]
@@ -169,4 +202,6 @@ public class CustomDataSetController : BaseController
 
         return Ok(data);
     }
+
+    public record Preview(string query);
 }
