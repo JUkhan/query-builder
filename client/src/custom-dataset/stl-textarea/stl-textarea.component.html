@@ -1,0 +1,32 @@
+<div class="flex">
+    <mat-form-field class="fuse-mat-textarea flex-auto">
+        <mat-label *ngIf="label; else elseBlock"
+            >{{ label }}
+            <span style="color: red">{{
+                required
+                    ? "*"
+                    : ""
+            }}</span></mat-label
+        >
+        <ng-template #elseBlock>
+            <mat-label class="form-label"
+                >{{ name }}
+                <span style="color: red">{{
+                     required
+                        ? "*"
+                        : ""
+                }}</span></mat-label
+            >
+        </ng-template>
+        <textarea
+            [formControl]="getControl()"
+            matInput
+            [rows]="3"
+            [readonly]="isReadOnly"
+        ></textarea>
+        <mat-error
+            *ngIf="ngControl?.status === 'INVALID' && ngControl?.touched"
+            >{{ ngControl.control?.errors }}</mat-error
+        >
+    </mat-form-field>
+</div>

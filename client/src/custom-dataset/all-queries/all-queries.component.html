@@ -1,0 +1,98 @@
+<div class="all-queries-main-container">
+    <div class="all-queries-header-col">
+        <div class="font-medium" [formGroup]="allQueryForm">
+            <mat-radio-group
+                [formControl]="getUniunTypeCtrl()"
+                *ngIf="allQueryFormArray.length > 1"
+            >
+                <mat-radio-button [value]="unionTypes.UNION" class="mr-4">
+                    Union
+                </mat-radio-button>
+                <mat-radio-button [value]="unionTypes.UNION_ALL">
+                    Union All
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <div>
+            <button
+                mat-button
+                class="mat-focus-indicator px-6 ml-3 mat-flat-button mat-button-base mat-primary mb-1"
+                [disabled]="false"
+                (click)="addQuery()"
+                color="primary"
+            >
+                + Add Query
+            </button>
+        </div>
+    </div>
+    <div
+        class="flex flex-col justify-between"
+        [formGroup]="allQueryForm"
+        [ngClass]="{
+            card: isCard()
+        }"
+    >
+        <!-- <button>click</button> -->
+        <div class="" formArrayName="allQueryFormArray">
+            <div
+                style="position: relative"
+                *ngFor="let config of allQueryFormArray.controls; let i = index"
+                [formGroupName]="i"
+            >
+                <div class="main-content">
+                    <mat-expansion-panel
+                        [expanded]="queryIndex === i"
+                        (opened)="setStep(i)"
+                        style="width: 98%"
+                    >
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <span class="label label-default">
+                                    Query - {{ i + 1 }}</span
+                                >
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <mat-icon
+                                style="
+                                    position: absolute;
+                                    right: 3px;
+                                    top: 1px;
+                                    cursor: pointer;
+                                "
+                                (click)="removeQuery(i)"
+                                >close</mat-icon
+                            >
+                            <div class="wrapper pt-2">
+                                <button
+                                    class="small-button mat-focus-indicator mat-flat-button mat-button-base mat-primary mb-[30px]"
+                                    [color]="'primary'"
+                                    mat-flat-button
+                                    type="button"
+                                    (click)="openQueryBuilderModal(i)"
+                                >
+                                    Open Query Builder
+                                </button>
+                                <div class="opacity-60">
+                                    <stl-textarea
+                                        [formControl]="getWebQueryCtrl(i)"
+                                        [label]="'Query'"
+                                        [name]="'webQuery'"
+                                        class="flex-auto"
+                                        [isReadOnly]="true"
+                                    >
+                                    </stl-textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                    <div class="query-delete">
+                        <mat-icon matTooltip="Delete" (click)="removeQuery(i)">
+                            delete
+                        </mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,214 @@
+<div style="text-align: right">
+    <button
+        mat-button
+        class="mat-focus-indicator px-6 ml-3 mat-flat-button mat-button-base mat-primary mb-1"
+        [disabled]="false"
+        (click)="addJoinTable()"
+        color="primary"
+    >
+        + Join Table
+    </button>
+</div>
+<div
+    class="flex flex-col justify-between"
+    [formGroup]="joinTableForm"
+    [ngClass]="{
+        card: isCard()
+    }"
+>
+    <!-- <button>click</button> -->
+    <div class="" formArrayName="joinTableFormArray">
+        <div
+            style="position: relative"
+            *ngFor="let config of joinTableFormArray.controls; let i = index"
+            [formGroupName]="i"
+        >
+            <div class="main-content">
+                <mat-expansion-panel
+                    [expanded]="additionalColumnConfigIndex === i"
+                    (opened)="setStep(i)"
+                    style="width: 98%"
+                >
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <span class="label label-default">
+                                Join Table - {{ i + 1 }}</span
+                            >
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div>
+                        <mat-icon
+                            style="
+                                position: absolute;
+                                right: 3px;
+                                top: 1px;
+                                cursor: pointer;
+                            "
+                            (click)="removeJoinTable(i)"
+                            >close</mat-icon
+                        >
+                        <div class="wrapper">
+                            <div class="join-table-row">
+                                <stl-single-select-dropdown
+                                    [label]="'Left Table'"
+                                    [inputData]="
+                                        (alreadySelectedTableList$ | async)||[]
+                                    "
+                                    [selectedData]="
+                                        this.joinTableFormArray
+                                            .at(i)
+                                            .get('leftTableName')?.value ?? '-1'
+                                    "
+                                    [defaultDropDownData]="'Select a Table'"
+                                    (selectedItem)="
+                                        onSelectFormTable($event, i)
+                                    "
+                                ></stl-single-select-dropdown>
+                                <stl-single-select-dropdown
+                                    [label]="'Join Type'"
+                                    [inputData]="joinTypes"
+                                    [defaultDropDownData]="'Select a Type'"
+                                    [selectedData]="
+                                        this.joinTableFormArray
+                                            .at(i)
+                                            .get('joinType')?.value ?? '-1'
+                                    "
+                                    (selectedItem)="onSelectJoinType($event, i)"
+                                ></stl-single-select-dropdown>
+                                <stl-single-select-dropdown
+                                    [label]="'Right Table'"
+                                    [inputData]="tableList"
+                                    [selectedData]="
+                                        this.joinTableFormArray
+                                            .at(i)
+                                            .get('rightTableName')?.value ?? '-1'
+                                    "
+                                    [defaultDropDownData]="'Select a Table'"
+                                    (selectedItem)="
+                                        onSelectJoinTable($event, i)
+                                    "
+                                ></stl-single-select-dropdown>
+                            </div>
+                            <div style="text-align: right">
+                                <button
+                                    mat-button
+                                    class="small-button mat-focus-indicator mat-flat-button mat-button-base mat-primary mb-1"
+                                    [disabled]="false"
+                                    (click)="addJoinCondition(i)"
+                                    color="primary"
+                                >
+                                    + Add Join Condition
+                                </button>
+                            </div>
+                            <div
+                                class="join-conditions"
+                                formArrayName="joinConditionFormArray"
+                            >
+                                <div
+                                    *ngFor="
+                                        let condition of joinConditionFormArray(
+                                            i
+                                        ).controls;
+                                        let idx = index
+                                    "
+                                    [formGroupName]="idx"
+                                    class="join-condition"
+                                >
+                                    <div class="join-table-row">
+                                        <stl-single-select-dropdown
+                                            [label]="'Left Table Column'"
+                                            [showLabel]="idx === 0"
+                                            [inputData]="
+                                                queryBuilderService.getAllColumnListByTable(
+                                                    this.joinTableFormArray
+                                                        .at(i)
+                                                        .get('leftTableName')
+                                                        ?.value??''
+                                                )||[]
+                                            "
+                                            [selectedData]="
+                                                this.joinConditionFormArray(i)
+                                                    .at(idx)
+                                                    .get('leftColumn')?.value ??
+                                                '-1'
+                                            "
+                                            [defaultDropDownData]="
+                                                'Select a Column'
+                                            "
+                                            (selectedItem)="
+                                                onSelectLeftTableColumn(
+                                                    $event,
+                                                    i,
+                                                    idx
+                                                )
+                                            "
+                                        ></stl-single-select-dropdown>
+
+                                        <stl-single-select-dropdown
+                                            [label]="'Operator'"
+                                            [showLabel]="idx === 0"
+                                            [inputData]="operators"
+                                            [defaultDropDownData]="
+                                                'Select an Operator'
+                                            "
+                                            [selectedData]="
+                                                this.joinConditionFormArray(i)
+                                                    .at(idx)
+                                                    .get('operator')?.value ??
+                                                '-1'
+                                            "
+                                            (selectedItem)="
+                                                onSelectOperator($event, i, idx)
+                                            "
+                                        ></stl-single-select-dropdown>
+
+                                        <stl-single-select-dropdown
+                                            [label]="'Right Table Column'"
+                                            [showLabel]="idx === 0"
+                                            [inputData]="
+                                                tableColumnDataBehaviorSubjectList[
+                                                    i
+                                                ] | async
+                                            "
+                                            [selectedData]="
+                                                this.joinConditionFormArray(i)
+                                                    .at(idx)
+                                                    .get('rightColumn')?.value ??
+                                                '-1'
+                                            "
+                                            [defaultDropDownData]="
+                                                'Select a Column'
+                                            "
+                                            (selectedItem)="
+                                                onSelectRightTableColumn(
+                                                    $event,
+                                                    i,
+                                                    idx
+                                                )
+                                            "
+                                        ></stl-single-select-dropdown>
+                                    </div>
+                                    <div class="join-condition-delete">
+                                        <mat-icon
+                                            matTooltip="Delete"
+                                            (click)="
+                                                removeJoinCondition(i, idx)
+                                            "
+                                        >
+                                            delete
+                                        </mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+                <div class="join-condition-delete">
+                    <mat-icon matTooltip="Delete" (click)="removeJoinTable(i)">
+                        delete
+                    </mat-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

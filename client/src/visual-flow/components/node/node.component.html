@@ -1,0 +1,17 @@
+@if (node) {
+  
+  <div class="interactive-node-body selected-background" [attr.title]="node.name">
+    @if (node.output) {
+      <div fNodeOutput [fOutputMultiple]="true" [fOutputId]="node.output!"></div>
+      <div fNodeOutlet></div>
+    }
+
+    @if (node.input) {
+      <div fNodeInput [fInputMultiple]="false" [fInputId]="node.input"></div>
+    }
+    <div class="icon">
+      {{ node.name.substring(0,16) }}
+    </div>
+  </div>
+}
+

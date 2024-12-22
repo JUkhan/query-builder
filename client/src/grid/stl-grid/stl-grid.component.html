@@ -1,0 +1,82 @@
+<ng-template #stlFormContainer>
+    <!-- <app-stl-form [formSelector]="formSelector" [formConfigs]="tableConfig" [formTitle]="inputFormTitle"
+        [formData]="formRowData" [model]="model" [haveAdditionalFormFields]="haveAdditionalFormFields"
+        (submitFormDataEmitter)="receiveComponentData($event)" (cancelFormEmitter)="formCancel()"
+        (manualFormDataEmitter)="manualFormData($event)" (manualFormCancelEmitter)="formCancel()"
+        [customFormInfo]="customFormInfo">
+    </app-stl-form> -->
+    <h3>Under Construction</h3>
+</ng-template>
+
+<div #tableContent style="width:100%;">
+    <div class="header-content">
+        <div class="search-container">
+            <div class="table-title" *ngIf="title && !searchBoxVisibility">
+                <mat-icon *ngIf="showBackButton" matTooltip="Previous view" class="back-button" (click)="goBack()">arrow_back</mat-icon>
+                <mat-icon class="view-data-icon">list_alt</mat-icon>
+                <span class="title"> {{ title }}</span>
+            </div>
+
+            <mat-form-field appearance="fill" class="table-data-searchBox" *ngIf="searchBoxVisibility">
+                <input #SearchInput [(ngModel)]="searchInputValue" matInput placeholder="Search..." autocomplete="off"
+                    (keyup)="applySearch($event)" appInputFocus />
+                <button mat-button matSuffix mat-icon-button aria-label="Clear" 
+                    *ngIf="searchInputValue">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+        <div class="table-toolbar">
+            <ng-container *ngIf="toolbarTemplate" [ngTemplateOutlet]="toolbarTemplate"></ng-container>
+            <span *ngFor="let button of toolbarButtons">
+                <ng-template dynamicToolbarButtonHost [button]="button"></ng-template>
+            </span>
+            <button *ngIf="showSearchButton" mat-icon-button color="accent" aria-label=""
+                (click)="toggleSearchBox()">
+                <mat-icon *ngIf="searchBoxVisibility === false" matTooltip="Search">search</mat-icon>
+                <mat-icon class="stl-src-off" *ngIf="searchBoxVisibility === true"
+                    matTooltip="Search">search_off</mat-icon>
+            </button>
+            <button *ngIf="showCreateButton" mat-icon-button color="accent" aria-label=""
+                (click)="emitCreateEvent()">
+                <mat-icon matTooltip="Create">add</mat-icon>
+            </button>
+
+            <button *ngIf="showColumnsButton" mat-icon-button color="accent" aria-label=""
+                (click)="openColumnsDialog($event)">
+                <mat-icon matTooltip="Columns">view_column</mat-icon>
+            </button>
+
+            <!-- <button *ngIf="showDownLoadButton" mat-icon-button [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with a menu">
+                <mat-icon matTooltip="Download">download</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+
+                <button mat-menu-item *ngIf="downLoadCsvEnabled">
+                    <mat-icon>description</mat-icon>
+                    <span>CSV</span>
+                </button>
+                <button mat-menu-item disabled *ngIf="downLoadExcelEnabled">
+                    <mat-icon></mat-icon>
+                    <span>EXCEL</span>
+                </button>
+                <button mat-menu-item *ngIf="downLoadJpgEnabled">
+                    <mat-icon>image</mat-icon>
+                    <span>JPG</span>
+                </button>
+                <button mat-menu-item disabled *ngIf="downLoadExcelEnabled">
+                    <mat-icon></mat-icon>
+                    <span>PNG</span>
+                </button>
+            </mat-menu> -->
+        </div>
+
+    </div>
+    <ag-grid-angular style="width: 100%; height: 100%;  height: 520px;" class="ag-theme-alpine ag-theme-stl"
+        [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [gridOptions]="gridOptions" [rowData]="rowData|async"
+        [defaultColGroupDef]="defaultColGroupDef" (gridReady)="onGridReady($event)" [getRowId]="getRowId"
+        [rowModelType]="rowModelType" [cacheBlockSize]="pageSize" [paginationPageSize]="pageSize">
+    </ag-grid-angular>
+
+</div>

@@ -1,0 +1,5 @@
+<div class="card" cdkDropList (cdkDropListDropped)="dropColumns($event)">
+    <div *ngFor="let col of selectClausePartsArray" class="col-card" cdkDrag>
+        <p>{{ col.columnName }}</p>
+    </div>
+</div>

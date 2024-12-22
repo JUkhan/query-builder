@@ -1,0 +1,85 @@
+<div class="calculated-columns-main-container">
+    <div style="text-align: right">
+        <button
+            mat-button
+            class="mat-focus-indicator px-6 ml-3 mat-flat-button mat-button-base mat-primary mb-1"
+            [disabled]="false"
+            (click)="addCalculatedColumn()"
+            color="primary"
+        >
+            + Add Calculated Column
+        </button>
+    </div>
+    <div
+        class="flex flex-col justify-between"
+        [formGroup]="calculatedColumnsForm"
+        [ngClass]="{
+            card: isCard()
+        }"
+    >
+        <!-- <button>click</button> -->
+        <div class="" formArrayName="calculatedColumnsFormArray">
+            <div
+                style="position: relative"
+                *ngFor="
+                    let config of calculatedColumnsFormArray.controls;
+                    let i = index
+                "
+                [formGroupName]="i"
+            >
+                <div class="main-content">
+                    <mat-expansion-panel
+                        [expanded]="calculatedColumnIndex === i"
+                        (opened)="setStep(i)"
+                        style="width: 98%"
+                    >
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <span class="label label-default">
+                                    Calculated Column - {{ i + 1 }}</span
+                                >
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <mat-icon
+                                style="
+                                    position: absolute;
+                                    right: 3px;
+                                    top: 1px;
+                                    cursor: pointer;
+                                "
+                                (click)="removeCalculatedColumn(i)"
+                                >close</mat-icon
+                            >
+                            <div class="wrapper">
+                                <mat-form-field class="flex-auto w-full">
+                                    <mat-label>Column Name</mat-label>
+                                    <input
+                                        type="text"
+                                        matInput
+                                        formControlName="columnName"
+                                    />
+                                </mat-form-field>
+                                <stl-textarea
+                                    [formControl]="getExpressionCtl(i)"
+                                    [label]="'Expression'"
+                                    [name]="'expression'"
+                                    class="flex-auto"
+                                >
+                                </stl-textarea>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                    <div class="calculated-col-delete">
+                        <mat-icon
+                            matTooltip="Delete"
+                            (click)="removeCalculatedColumn(i)"
+                        >
+                            delete
+                        </mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

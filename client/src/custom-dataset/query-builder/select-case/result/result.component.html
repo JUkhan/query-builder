@@ -1,0 +1,40 @@
+<div>
+    <div class="title">Result</div>
+    <div class="result" [formGroup]="resultForm">
+        <stl-single-select-dropdown
+            [label]="'Value Type'"
+            [inputData]="resultTypes"
+            [defaultDropDownData]="'Select a Type'"
+            [selectedData]="
+                this.resultForm.get('resultType')?.value ?? 'tableColumn'
+            "
+            (selectedItem)="onSelectResultType($event)"
+        ></stl-single-select-dropdown>
+        <stl-single-select-dropdown
+            *ngIf="isTableColumnValue()"
+            [label]="'Table'"
+            [inputData]="(alreadySelectedTableList$ | async)||[]"
+            [selectedData]="this.resultForm.get('tableName')?.value ?? '-1'"
+            [defaultDropDownData]="'Select a Table'"
+            (selectedItem)="onSelectTable($event)"
+        ></stl-single-select-dropdown>
+        <stl-single-select-dropdown
+            *ngIf="isTableColumnValue()"
+            [label]="'Table Column'"
+            [inputData]="
+                queryBuilderService.getAllColumnListByTable(
+                    this.resultForm.get('tableName')?.value??''
+                )||[]
+            "
+            [selectedData]="
+                this.resultForm.get('tableColumnName')?.value ?? '-1'
+            "
+            [defaultDropDownData]="'Select a Column'"
+            (selectedItem)="onSelectTableColumn($event)"
+        ></stl-single-select-dropdown>
+        <mat-form-field class="flex-auto" *ngIf="!isTableColumnValue()">
+            <mat-label>Specific Value</mat-label>
+            <input type="text" matInput formControlName="specificValue" />
+        </mat-form-field>
+    </div>
+</div>

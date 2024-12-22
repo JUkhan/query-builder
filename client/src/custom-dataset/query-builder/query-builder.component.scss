@@ -1,0 +1,50 @@
+/*.highlighted-section {
+    animation: highlight 1.5s ease-in-out;
+}
+
+@keyframes highlight {
+    0% {
+        background-color: rgba(255, 255, 0, 0.5);
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+.card {
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+    padding: 15px 13px;
+    margin-bottom: 15px;
+    background: #f1f5f9;
+}
+
+::ng-deep .mat-horizontal-stepper-header {
+    width: 100% !important;
+}
+
+::ng-deep .mat-horizontal-stepper-header-container {
+    position: sticky;
+    top: 0;
+    z-index: 101;
+    background: #f4faff !important;
+    pointer-events: none;
+}
+
+.stl-mat-dialog-content.stl-relation-formula.query-builder-modal
+    .mat-horizontal-content-container {
+    padding: 5px 0px !important;
+    height: 55vh !important;
+    overflow: scroll !important;
+}
+
+.group-by {
+    margin-bottom: 10px;
+    font-weight: bold !important;
+    text-align: center;
+}
+*/
+
+::ng-deep{
+    width: 1200px;
+}

@@ -1,0 +1,96 @@
+.main-container {
+    border: 1px dashed #e2e8f0;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-bottom: 15px;
+    background: #f7f8f9;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.toggle-group {
+    border: 1px solid #dcdcdc !important;
+    border-radius: 4px !important;
+    overflow: hidden;
+}
+
+.toggle-button {
+    color: black;
+    border: none;
+}
+
+.toggle-button.mat-button-toggle-checked {
+    background-color: #1976d2;
+    color: white !important;
+}
+
+.toggle-button:not(.mat-button-toggle-checked) {
+    background-color: white;
+    color: black;
+}
+
+.toggle-group .mat-button-toggle-checked:hover,
+.toggle-group .mat-button-toggle:hover {
+    background-color: #115293 !important;
+}
+
+.mat-button-toggle-group .mat-button-toggle {
+    border-radius: 0px !important;
+    overflow: hidden;
+    border: none !important;
+    font-weight: 500;
+}
+
+::ng-deep
+    .mat-button-toggle-appearance-standard
+    .mat-button-toggle-label-content {
+    line-height: 30px !important;
+}
+
+.buttons-row {
+    display: flex;
+    align-items: center;
+}
+
+.condition-row {
+    width: 95%;
+    display: flex;
+    gap: 5px;
+    * {
+        width: 100%;
+    }
+}
+
+.conditions {
+    border: 1px solid #c9c9c9;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left: 10px;
+    overflow-x: scroll;
+}
+
+.condition-row {
+    ::ng-deep
+        .mat-form-field.mat-form-field-appearance-fill
+        .mat-form-field-wrapper {
+        margin-bottom: 0px !important;
+    }
+}
+
+.condition-delete {
+    width: 2%;
+}
+.condition-delete mat-icon {
+    color: #d16846;
+    display: block;
+    cursor: pointer;
+}
+
+.condition-row-with-remove {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}

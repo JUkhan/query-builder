@@ -1,0 +1,37 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 200px;
+  min-width: 49px;
+  height: 100%;
+  border-right: 1px solid var(--gutter-color);
+  overflow: hidden;
+  overflow-y: auto;
+  z-index: 1;
+  gap: 8px;
+  padding: 8px;
+}
+
+::ng-deep .visual-programming-external-item {
+  position: relative;
+  display: flex;
+  width: 120px;
+  padding: 2px;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: var(--background-color);
+  border: 1px solid;
+  cursor: move;
+  z-index: 1150;
+  margin-top: 8px;
+
+}
+
+.search{
+  display: inline-block;
+  width: 140px;
+}
+
+
+

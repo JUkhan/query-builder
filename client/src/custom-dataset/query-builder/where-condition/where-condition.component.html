@@ -1,0 +1,8 @@
+<div>
+    <div class="title">Filter Conditions</div>
+    <app-condition-group
+        [filterConditionsForm]="filterConditionsForm"
+        [isFirstGroup]="true"
+        (filterConditionChanged)="onFilterConditionChanged($event)"
+    ></app-condition-group>
+</div>

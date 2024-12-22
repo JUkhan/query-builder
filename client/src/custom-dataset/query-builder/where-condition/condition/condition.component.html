@@ -1,0 +1,51 @@
+<div [formGroup]="conditionsForm" class="condition-row-with-remove">
+    <div class="condition-row">
+        <stl-single-select-dropdown
+            [label]="'Table'"
+            [showLabel]="index === 0"
+            [inputData]="(alreadySelectedTableList$ | async)||[]"
+            [selectedData]="conditionsForm.get('leftTableName')?.value ?? '-1'"
+            [defaultDropDownData]="'Select a Table'"
+            (selectedItem)="
+                onSelectDropdownData($event, index, 'leftTableName')
+            "
+        ></stl-single-select-dropdown>
+
+        <stl-single-select-dropdown
+            [label]="'Column'"
+            [showLabel]="index === 0"
+            [inputData]="
+                queryBuilderService.getAllColumnListByTable(
+                    conditionsForm.get('leftTableName')?.value??''
+                )||[]
+            "
+            [selectedData]="conditionsForm.get('leftTableColumn')?.value ?? '-1'"
+            [defaultDropDownData]="'Select a Column'"
+            (selectedItem)="
+                onSelectDropdownData($event, index, 'leftTableColumn')
+            "
+        ></stl-single-select-dropdown>
+
+        <stl-single-select-dropdown
+            [label]="'Operator'"
+            [showLabel]="index === 0"
+            [inputData]="operators"
+            [defaultDropDownData]="'Select an Operator'"
+            [selectedData]="conditionsForm.get('operator')?.value ?? null"
+            (selectedItem)="onSelectDropdownData($event, index, 'operator')"
+        ></stl-single-select-dropdown>
+
+        <mat-form-field class="flex-auto" *ngIf="showValueField">
+            <mat-label *ngIf="index === 0">Specific Value</mat-label>
+            <input type="text" matInput formControlName="specificValue" />
+        </mat-form-field>
+    </div>
+    <div class="condition-delete">
+        <mat-icon
+            matTooltip="Remove Condition"
+            (click)="removeCondition(index)"
+        >
+            delete
+        </mat-icon>
+    </div>
+</div>

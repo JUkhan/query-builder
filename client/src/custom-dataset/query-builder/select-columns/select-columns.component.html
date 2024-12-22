@@ -1,0 +1,89 @@
+<div *ngIf="alreadySelectedTableList$ | async as tableList">
+    <div class="table-title">Select columns</div>
+    <div class="select-columns card">
+        <div
+            class="table-col"
+            *ngFor="let table of tableList"
+        >
+            <div class="selected-table-list-header">
+                <mat-checkbox
+                    [checked]="areAllColumnsSelected(table.value)"
+                    (change)="toggleSelectAllColumns($event, table.value)"
+                >
+                    {{ table.label }}
+                </mat-checkbox>
+            </div>
+            <div>
+                <div class="inner-table-header">
+                    <p>Column</p>
+                    <p>Aggregate Function</p>
+                    <p>Custom Column Name</p>
+                </div>
+                <div class="flex flex-col p-2">
+                    <div
+                        *ngFor="let col of getTableWiseColumnList(table.value)"
+                        class="inner-table-row"
+                        [formGroup]="
+                            typeCheck(this.tableWiseSelectedColumnsForm
+                                .get(table.value)
+                                ?.get(col))
+                        "
+                    >
+                        <mat-checkbox
+                            [checked]="
+                                this.tableWiseSelectedColumnsForm
+                                    .get(table.value)!
+                                    .get(col)!
+                                    .get('isSelected')?.value
+                            "
+                            (change)="onCheckboxClick(table.value, col, $event)"
+                        >
+                            {{ col }}
+                        </mat-checkbox>
+
+                        <stl-single-select-dropdown
+                            *ngIf="
+                                this.tableWiseSelectedColumnsForm
+                                    .get(table.value)!
+                                    .get(col)!
+                                    .get('isSelected')?.value
+                            "
+                            [showLabel]="false"
+                            [inputData]="aggregateFunctionList"
+                            [defaultDropDownData]="'Select a Function'"
+                            [selectedData]="
+                                this.tableWiseSelectedColumnsForm
+                                    .get(table.value)!
+                                    .get(col)!
+                                    .get('aggregateFunction')?.value ?? null
+                            "
+                            (selectedItem)="
+                                onSelectAggregateFunction(
+                                    $event,
+                                    table.value,
+                                    col
+                                )
+                            "
+                        ></stl-single-select-dropdown>
+
+                        <mat-form-field
+                            class="flex-auto ml-2"
+                            *ngIf="
+                                this.tableWiseSelectedColumnsForm
+                                    .get(table.value)!
+                                    .get(col)!
+                                    .get('isSelected')?.value
+                            "
+                        >
+                            <input
+                                type="text"
+                                matInput
+                                formControlName="customColumnName"
+                            />
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

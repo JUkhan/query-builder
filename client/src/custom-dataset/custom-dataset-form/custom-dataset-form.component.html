@@ -1,0 +1,272 @@
+<div class="container w-full">
+    <form
+        [formGroup]="customDatasetForm"
+        class="flex flex-col bg-card overflow-hidden"
+    >
+        <div class="text-3xl font-bold truncate stl-slide-form-title">
+            <mat-icon style="cursor: pointer" (click)="goBack()"
+                >arrow_back</mat-icon
+            >
+            {{ title }}
+        </div>
+        <div
+            class="flex flex-col border-t space-y-8 survey-slid-fix h-[73vh] mb-[48px] p-0"
+        >
+            <mat-stepper linear #datasetStepper class="mat-headers-row">
+                <mat-step>
+                    <ng-template matStepLabel>Basic Info</ng-template>
+                    <div class="flex flex-col space-y-8">
+                        <div class="flex mt-7">
+                            <mat-form-field class="flex-auto">
+                                <mat-label>Dataset Name</mat-label>
+                                <input
+                                    type="text"
+                                    matInput
+                                    formControlName="DatasetName"
+                                    required
+                                />
+
+                                <mat-error
+                                    *ngIf="
+                                        customDatasetForm?.get('DatasetName')?.hasError('required') &&
+                                        customDatasetForm?.get('DatasetName')?.touched
+                                    "
+                                >
+                                    Name is required
+                                </mat-error>
+
+                                <mat-error
+                                    *ngIf="
+                                        customDatasetForm.controls['DatasetName'].errors &&
+                                        customDatasetForm.controls['DatasetName'].errors?.['customError']
+                                    "
+                                >
+                                    {{ "Only letters, numbers and underscore(_) are allowed" }}
+                                </mat-error>
+
+                                <!-- </mat-error> -->
+                            </mat-form-field>
+                        </div>
+
+                        <div class="flex mt-7">
+                            <mat-form-field class="flex-auto">
+                                <mat-label>Query Type</mat-label>
+                                <mat-select
+                                    formControlName="QueryType"
+                                    (selectionChange)="updateQueryType()"
+                                    placeholder="Select a Query Type"
+                                >
+                                    <mat-option value=""
+                                        >Select a Query Type</mat-option
+                                    >
+                                    <mat-option
+                                        *ngFor="let queryType of queryTypeData"
+                                        [value]="queryType.value"
+                                    >
+                                        {{ queryType.label }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error>Query Type is Required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <stl-single-select-dropdown
+                            class="mt-7"
+                            [label]="'Query Creation Mode'"
+                            [inputData]="queryCreationModes"
+                            [defaultDropDownData]="'Select Query Creation Mode'"
+                            [isRequired]="true"
+                            [disabled]="!!datasetId"
+                            [selectedData]="
+                                this.customDatasetForm.controls['QueryCreationMode'].value ?? '-1'
+                            "
+                            (selectedItem)="onSelectQueryCreationMode($event)"
+                        ></stl-single-select-dropdown>
+                        <mat-checkbox
+                            formControlName="IsUsedAsReference"
+                            class="checkbox-margin"
+                            style="
+                                margin-bottom: 5px !important;
+                                margin-top: 5px !important;display: block;
+                            "
+                        >Is Used As Reference?
+                        </mat-checkbox>
+<!-- 
+                        <mat-checkbox
+                            formControlName="IsQueryForMobile"
+                            class="checkbox-margin"
+                            style="
+                                margin-bottom: 5px !important;
+                                margin-top: 5px !important;
+                            "
+                            >Is Dataset Applicable for Mobile
+                        </mat-checkbox>
+
+                        <mat-checkbox
+                            formControlName="IsDataDownloadableForMobile"
+                            class="checkbox-margin"
+                            style="
+                                margin-bottom: 5px !important;
+                                margin-top: 5px !important;
+                            "
+                            >Is Applicable for Data Download in Mobile
+                        </mat-checkbox>
+
+
+                        <mat-checkbox
+                            formControlName="IsUsedAsReference"
+                            class="checkbox-margin"
+                            style="
+                                margin-bottom: 5px !important;
+                                margin-top: 5px !important;
+                            "
+                        >Is Used As Reference?
+                        </mat-checkbox>
+
+
+                        <div class="flex mt-7">
+                            <mat-form-field class="flex-auto">
+                                <mat-label>Column Name</mat-label>
+                                <input
+                                    type="text"
+                                    matInput
+                                    formControlName="ColumnName"
+                                />
+                            </mat-form-field>
+                        </div>
+
+
+                        <stl-single-select-dropdown
+                            class="mt-7"
+                            [label]="'Table Name'"
+                            [inputData]="tableList$ | async"
+                            [defaultDropDownData]="'Select Table'"
+                            [isRequired]="false"
+                            [disabled]="false"
+                            [selectedData]="
+                                this.customDatasetForm.controls['TableName'].value ?? '-1'
+                            "
+                            (selectedItem)="onSelectTableName($event)"
+                        ></stl-single-select-dropdown>
+ -->
+
+                    </div>
+                </mat-step>
+                <mat-step *ngIf="!isCustomQuery">
+                    <ng-template matStepLabel>Query Builder</ng-template>
+                    <div>
+                        <div *ngIf="!isCustomQuery">
+                            <app-all-queries
+                                class="w-full"
+                                [FullJsonData]="FullJsonData"
+                                (allQueryFormValueChanged)="
+                                    onQueriesConfigChange($event)
+                                "
+                            ></app-all-queries>
+                            @if (showPreviewTable) {
+                            <stl-grid [columnDefs]="previewTableConfig" [showCreateButton]="false"  [rowModelType]="'clientSide'"   [rowData]="previewTableData" [title]="'Query Result'" >
+
+                            </stl-grid>
+                        }
+                            
+                        </div>
+                    </div>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Query</ng-template>
+                    <div class="p-4">
+                        <div class="flex mt-7">
+                            <mat-form-field class="fuse-mat-textarea flex-auto">
+                                <mat-label>Web Query</mat-label>
+                                <textarea
+                                    matInput
+                                    formControlName="WebQuery"
+                                    required
+                                    [rows]="6"
+                                >
+                                </textarea>
+                                <mat-error>Web Query is Required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="flex mt-7">
+                            <mat-form-field class="fuse-mat-textarea flex-auto">
+                                <mat-label>Mobile Query</mat-label>
+                                <textarea
+                                    matInput
+                                    formControlName="MobileQuery"
+                                    [rows]="6"
+                                    [required]="
+                                        customDatasetForm.controls['IsQueryForMobile'].value === true
+                                    "
+                                >
+                                </textarea>
+                                <mat-error>Mobile Query is Required</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </mat-step>
+            </mat-stepper>
+        </div>
+
+        <div
+            class="flex items-center justify-end border-t px-2 stl-slid-footer"
+        >
+            <button
+                class="mat-focus-indicator stl-close-btn mat-button mat-button-base"
+                (click)="resetForm()"
+                mat-button
+            >
+                Cancel
+            </button>
+            <button
+                *ngIf="datasetStepper.selectedIndex !== 0"
+                class="mat-focus-indicator ml-2 mat-flat-button mat-button-base mat-primary"
+                (click)="goToPreviousStep()"
+                [color]="'primary'"
+                mat-flat-button
+                type="button"
+            >
+                Back
+            </button>
+            <button
+                *ngIf="!isCustomQuery && (datasetStepper.selectedIndex ==1)"
+                class="mat-focus-indicator mat-flat-button mat-button-base mat-primary ml-2"
+                [color]="'accent'"
+                mat-flat-button
+                type="button"
+                (click)="onPreviewClick()"
+                [disabled]="!isPreviewEnabled()"
+            >
+                Preview 
+            </button>
+            <button
+                *ngIf="
+                    datasetStepper.selectedIndex !==
+                    datasetStepper.steps.length - 1
+                "
+                class="mat-focus-indicator ml-2 mat-flat-button mat-button-base mat-primary"
+                (click)="goToNextStep()"
+                [color]="'primary'"
+                mat-flat-button
+                type="button"
+            >
+                Next
+            </button>
+            <button
+                *ngIf="
+                    datasetStepper.selectedIndex ===
+                    datasetStepper.steps.length - 1
+                "
+                [disabled]="customDatasetForm.invalid"
+                [color]="'primary'"
+                type="submit"
+                class="mat-focus-indicator px-6 ml-2 mat-flat-button mat-button-base mat-primary"
+                mat-flat-button
+                (click)="onSubmit()"
+            >
+                Save
+            </button>
+        </div>
+    </form>
+</div>

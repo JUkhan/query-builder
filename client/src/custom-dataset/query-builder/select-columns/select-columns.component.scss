@@ -1,0 +1,52 @@
+.selected-table-list-header {
+    background-color: #3f3d3e;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: center;
+}
+
+.select-columns {
+    display: flex;
+    overflow: scroll;
+    max-height: 300px !important;
+    * {
+        width: 100%;
+    }
+}
+
+.table-col {
+    border-right: 1px solid #e2e8f0;
+    min-width: 650px !important;
+}
+
+.table-title {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.inner-table-header {
+    display: flex;
+    background-color: #dceffe;
+    font-weight: 600;
+    text-align: center;
+    * {
+        min-width: 200px !important;
+    }
+}
+
+.inner-table-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f5f5ff;
+    * {
+        min-width: 200px !important;
+    }
+    ::ng-deep
+        .mat-form-field.mat-form-field-appearance-fill
+        .mat-form-field-wrapper {
+        margin-bottom: 0px !important;
+    }
+    ::ng-deep .mat-form-field {
+        display: unset !important;
+    }
+}

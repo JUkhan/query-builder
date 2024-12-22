@@ -1,0 +1,145 @@
+<mat-drawer
+    #drawer
+    class="drawer-sidenav stl-view-data-box"
+    mode="over"
+    position="end"
+    [opened]="isOpen"
+    (closed)="closeMatDrawer()"
+    [ngStyle]="{
+        width:
+            sideNavContent == 'add' || sideNavContent == 'edit' ? '80%' : '50%'
+    }"
+>
+    <div>
+        <div class="flex flex-col bg-card overflow-hidden">
+            <div class="text-3xl font-bold truncate stl-slide-form-title">
+                Downloaded File List
+            </div>
+            <div class="border-t file-status-fix stl-file-status-box">
+                <table
+                    mat-table
+                    [dataSource]="dataSource"
+                    fixedLayout="true"
+                    matTableExporter
+                >
+                    <ng-container
+                        *ngFor="let col of displayedColumns; let i = index"
+                        [matColumnDef]="col"
+                    >
+                        <span>
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ displayedColumnNames[i] }}
+                            </th>
+                        </span>
+
+                        <td mat-cell *matCellDef="let element">
+                            <span *ngIf="col == 'FileName'">
+                                <span
+                                    class="stl-file-status-decoration"
+                                    *ngIf="element.status == 'Downloaded'"
+                                    style="cursor: pointer"
+                                    (click)="
+                                        downloadFile(
+                                            element.fileName,
+                                            element.downloadingPath
+                                        )
+                                    "
+                                    >{{ element.fileName }}</span
+                                >
+
+                                <span
+                                    class="stl-file-status-decoration-none"
+                                    *ngIf="element.status == 'Downloading'"
+                                    >{{ element.fileName }}</span
+                                >
+                                <span
+                                    class="stl-file-status-decoration-failed"
+                                    *ngIf="element.status == 'Failed'"
+                                    >{{ element.fileName }}</span
+                                >
+                            </span>
+                            <span *ngIf="col == 'DownloadingPath'">
+                                <button
+                                    *ngIf="element.status == 'Downloaded'"
+                                    class="mr-3"
+                                    (click)="
+                                        openDownloadedFileDetailsDialog(
+                                            element.id
+                                        )
+                                    "
+                                >
+                                    <mat-icon matTooltip="Rename File Name">edit</mat-icon>
+                                </button>
+                                <button
+                                    (click)="deleteFile(element.id)"
+                                >
+                                    <mat-icon matTooltip="Delete File">delete</mat-icon>
+                                </button>
+                            </span>
+
+                            <span *ngIf="col == 'CreateTime'">
+                                {{ element.createdTime }}
+                            </span>
+                            <span
+                                class="stl-mat-cell-color"
+                                *ngIf="col == 'status'"
+                            >
+                                <span
+                                    class="stl-file-status-failed stl-file-status-span text-white"
+                                    style="background-color: #d16846"
+                                    *ngIf="element.status == 'Failed'"
+                                >
+                                    {{ element.status }}
+                                </span>
+                                <span
+                                    class="stl-file-status-downloaded stl-file-status-span text-white"
+                                    style="background-color: #13b14a"
+                                    *ngIf="element.status == 'Downloaded'"
+                                >
+                                    {{ element.status }}
+                                </span>
+                                <span
+                                    class="stl-file-status-downloading stl-file-status-span text-white"
+                                    style="background-color: #1d95f3"
+                                    *ngIf="element.status == 'Downloading'"
+                                >
+                                    {{ element.status }}
+                                </span>
+                            </span>
+                        </td>
+                    </ng-container>
+                    <tr
+                        mat-header-row
+                        *matHeaderRowDef="displayedColumns; sticky: true"
+                    ></tr>
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: displayedColumns"
+                    ></tr>
+                </table>
+                <mat-paginator
+                    class="right-paginator"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [pageSize]="pageSize"
+                    [pageIndex]="pageNumber"
+                    [length]="totalRowData"
+                    (page)="pageChanged($event)"
+                    aria-label="Select page "
+                >
+                </mat-paginator>
+            </div>
+
+            <div
+                class="flex items-center justify-end border-t px-8 stl-slid-footer"
+            >
+                <button
+                    class="mat-focus-indicator stl-close-btn mat-button mat-button-base"
+                    mat-button
+                    (click)="closeSidebar()"
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</mat-drawer>

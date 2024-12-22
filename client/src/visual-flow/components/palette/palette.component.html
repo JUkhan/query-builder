@@ -1,0 +1,20 @@
+
+<div class="palette">
+<mat-form-field>
+  <mat-label>Search</mat-label>
+  <input
+  class="search"
+    matInput
+    type="text"
+    #searchInput
+    (input)="onValChange(searchInput.value)"
+  />
+  <mat-icon>search</mat-icon>
+</mat-form-field>
+@for (item of fiteredTableNames(); track item) {
+  <div class="visual-programming-external-item" fExternalItem [fData]="item">
+    <div>{{ item }}</div>
+  </div>
+}
+
+</div>

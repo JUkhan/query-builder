@@ -1,0 +1,67 @@
+<button
+    mat-icon-button
+    color="accent"
+    aria-label=""
+    (click)="openUploadDataSidebar()"
+>
+    <mat-icon matTooltip="Upload Json">upload</mat-icon>
+</button>
+
+<ng-template #jsonUploaderForm>
+        <h3 class="text-3xl font-bold truncate stl-slide-form-title">
+            Upload JSON Data
+        </h3>
+        <div class="flex flex-col border-t survey-slid-fix">
+            <div class="stl-upload-data-list flex flex-col pt-1 pb-1">
+                <div class="flex justify-between mt-1">
+                    <input
+                        type="file"
+                        #inputFile
+                        [accept]="'.json'"
+                        (change)="onFileSelected($event)"
+                    />
+
+                    <button
+                        *ngIf="selectedFile"
+                        class="stl-file-status-btn"
+                        (click)="
+                            inputFile.value = '';
+                            selectedFile = null;
+                            dataUploadErrors$.next(null)
+                        "
+                    >
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div
+                *ngIf="dataUploadErrors$ | async as errorList"
+                style="margin-top: 30px"
+            >
+                <p>Errors:</p>
+                <li *ngFor="let error of errorList">
+                    <span style="color: red">{{ error }}</span>
+                </li>
+            </div>
+            <div
+                class="flex items-center justify-end border-t px-8 stl-slid-footer"
+            >
+                <button
+                    mat-button
+                    class="stl-close-btn"
+                    (click)="closeMatDrawer()"
+                >
+                    Cancel
+                </button>
+                <button
+                    [color]="'primary'"
+                    mat-flat-button
+                    class="px-6 ml-3"
+                    (click)="uploadJson(inputFile)"
+                >
+                    Submit
+                </button>
+            </div>
+        </div>
+</ng-template>

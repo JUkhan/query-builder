@@ -1,0 +1,28 @@
+<!-- <mat-drawer-container class="drawer-container" autosize [hasBackdrop]="false">
+        <app-custom-dataset-sidebar
+        ></app-custom-dataset-sidebar>
+    <div class="container">
+        <app-table-wrapper2
+        class="stl-custom-data-table"
+            [showCreateButton]="false"
+            [title]="tableTitle"
+            [schemaName]="schemaName"
+            [tableName]="tableName"
+            [webQuery]="webQuery"
+            [queryType]="queryType"
+            [accessControlFilter]="accessControlFilter"
+            [isAvoidSnakeCaseForCustomDataset]="true"
+            [showFileStatusButton]="true"
+            [downLoadExcelEnabled]="true"
+            [downLoadCsvEnabled]="false"
+            (gridReady)="onGridReady($event)"
+            (fileStatusEmitter)="fileStatus($event)"
+            (exportExcelDataEmitter)="onExportExcelData($event)"
+        >
+        </app-table-wrapper2>
+    </div>
+</mat-drawer-container> -->
+
+<stl-grid [title]="tableTitle"  [model]="schemaName" (gridReady)="onGridReady($event)">
+
+</stl-grid>

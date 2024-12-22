@@ -1,0 +1,56 @@
+<mat-form-field [ngClass]="{ small: size === 'small' }">
+    <mat-label *ngIf="showLabel"
+        >{{ label }}
+        <span style="color: red">{{
+            isRequired || validationActive ? "*" : ""
+        }}</span></mat-label
+    >
+    <mat-select
+        #select
+        [disabled]="disabled"
+        (selectionChange)="onSelectChange($event)"
+        [(value)]="selectedData"
+        (openedChange)="selectPanelOpened($event)"
+    >
+        <mat-select-trigger>{{
+            getOptionLabel(selectedData)
+        }}</mat-select-trigger>
+        <div class="option-container stl-single-search">
+            <mat-form-field class="searchBox" *ngIf="searchable">
+                <input
+                    #SearchInput
+                    matInput
+                    placeholder="Search..."
+                    autocomplete="off"
+                    [(ngModel)]="filterText"
+                    placeholder="Search..."
+                    autocomplete="off"
+                    (keyup)="applySearch()"
+                    [appDropdownSearchInputFocus]="isPanelOpen"
+                />
+                <button
+                    mat-button
+                    matSuffix
+                    mat-icon-button
+                    aria-label="Clear"
+                    *ngIf="filterText.length"
+                    (click)="clearSearchBox()"
+                >
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+
+            <mat-option *ngFor="let data of filteredData" [value]="data.value">
+                <span
+                    *ngIf="stlFontsColumn"
+                    matPrefix
+                >
+                </span>
+                {{ data.label }}
+                <mat-icon matSuffix class="done-icon" *ngIf="data.icon?.length">
+                    {{ data.icon }}
+                </mat-icon>
+            </mat-option>
+        </div>
+    </mat-select>
+</mat-form-field>

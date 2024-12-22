@@ -178,6 +178,7 @@ public class CustomDataSetCrudService: ICustomDataSetCrudService
     public async Task<dynamic> Update(CustomDataset postModel)
     {
         var previousData = await _repository.GetByIdAsync(postModel.Id);
+        
 
         if (postModel.QueryType == "Function")
         {

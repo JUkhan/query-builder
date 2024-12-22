@@ -1,0 +1,142 @@
+<div class="container">
+    <h5 mat-dialog-title class="skip-rule-title-box border-b truncate">
+        Query Builder
+    </h5>
+
+    <div
+        mat-dialog-content
+        class="stl-mat-dialog-content stl-relation-formula query-builder-modal"
+    >
+        <mat-stepper linear #stepper class="mat-headers-row">
+            <mat-step>
+                <ng-template matStepLabel>Source Table</ng-template>
+                <stl-single-select-dropdown
+                    [label]="'Source Table'"
+                    [inputData]="tableList"
+                    [defaultDropDownData]="'Select a Table'"
+                    [isRequired]="true"
+                    [selectedData]="
+                        this.queryBuilderForm.controls['FormTable'].value ?? '-1'
+                    "
+                    (selectedItem)="onSelectFormTable($event)"
+                ></stl-single-select-dropdown>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Join Tables</ng-template>
+                <app-join-condition
+                    [tableList]="tableList"
+                    [tableWiseSelectedColumnsForm]="
+                        tableWiseSelectedColumnsForm
+                    "
+                    (configurationChanged)="onJoinConfigurationChange($event)"
+                ></app-join-condition>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Filter Conditions</ng-template>
+
+                <app-where-condition
+                    (filterConditionChanged)="onFilterConditionChange($event)"
+                ></app-where-condition>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Select Columns</ng-template>
+                <div class="group-by">
+                    <mat-checkbox
+                        [checked]="
+                            this.queryBuilderForm.controls['ApplyGroupBy'].value
+                        "
+                        (change)="toggleGroupByCheckbox($event)"
+                    >
+                        Apply Group By
+                    </mat-checkbox>
+                </div>
+                <app-select-columns
+                    [tableWiseSelectedColumnsForm]="
+                        tableWiseSelectedColumnsForm
+                    "
+                ></app-select-columns>
+                <app-select-case
+                    (selectCaseChanged)="onSelectCaseChange($event)"
+                ></app-select-case>
+                <app-calculated-columns
+                    (calculatedColumnFormValueChanged)="
+                        onCalculatedColumnFormValueChange($event)
+                    "
+                ></app-calculated-columns>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Order By</ng-template>
+                <app-order-by
+                    (orderByConfigChanged)="onOrderByConfigChange($event)"
+                ></app-order-by>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Preview</ng-template>
+                <app-column-ordering
+                    [tableWiseSelectedColumnsForm]="
+                        tableWiseSelectedColumnsForm
+                    "
+                    [selectCases]="selectCases"
+                    [calculatedColumns]="calculatedColumns"
+                    (columnOrderChanged)="onColumnOrderChange($event)"
+                ></app-column-ordering>
+               
+                <stl-grid *ngIf="showPreviewTable" [showCreateButton]="false" [columnDefs]="previewTableConfig" [rowModelType]="'clientSide'"   [rowData]="previewTableData" [title]="'Query Result'" >
+
+                </stl-grid>
+            </mat-step>
+        </mat-stepper>
+    </div>
+    <div
+        mat-dialog-actions
+        class="dialog-action-footer flex items-center justify-end border-t px-8 mb-0"
+    >
+        <button
+            mat-button
+            class="mat-focus-indicator mat-button mat-button-base stl-close-btn"
+            (click)="onClose()"
+        >
+            Close
+        </button>
+        <button
+            *ngIf="stepper.selectedIndex !== 0"
+            class="mat-focus-indicator mat-flat-button mat-button-base mat-primary"
+            (click)="goToPreviousStep()"
+            [color]="'primary'"
+            mat-flat-button
+            type="button"
+        >
+            Back
+        </button>
+        <button
+            *ngIf="stepper.selectedIndex !== stepper.steps.length - 1"
+            class="mat-focus-indicator mat-flat-button mat-button-base mat-primary"
+            (click)="goToNextStep()"
+            [color]="'primary'"
+            mat-flat-button
+            type="button"
+        >
+            Next
+        </button>
+        <button
+            *ngIf="stepper.selectedIndex == stepper.steps.length - 1"
+            class="mat-focus-indicator mat-flat-button mat-button-base mat-primary"
+            [color]="'accent'"
+            mat-flat-button
+            type="button"
+            (click)="onPreviewClick()"
+        >
+            Preview
+        </button>
+        <button
+            *ngIf="stepper.selectedIndex == stepper.steps.length - 1"
+            class="mat-focus-indicator mat-flat-button mat-button-base mat-primary"
+            (click)="saveQuery()"
+            [color]="'primary'"
+            mat-flat-button
+            type="button"
+        >
+            Save
+        </button>
+    </div>
+</div>

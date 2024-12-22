@@ -54,7 +54,9 @@ namespace chatApp.DB
 
         public virtual async Task<T> GetByIdAsync(object id)
         {
-            return await _dbContext.Set<T>().FindAsync(id);
+            IQueryable<T> query = _dbContext.Set<T>().AsNoTracking();
+            //return await _dbContext.Set<T>().FindAsync(id);
+            return await query.FirstOrDefaultAsync(it=>it.Id==id);
         }
 
         public async Task<T> AddAsync(T entity)

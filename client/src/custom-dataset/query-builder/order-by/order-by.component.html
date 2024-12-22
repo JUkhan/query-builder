@@ -1,0 +1,84 @@
+<div>
+    <div style="text-align: right">
+        <button
+            mat-button
+            class="mat-focus-indicator px-6 ml-3 mat-flat-button mat-button-base mat-primary mb-1"
+            [disabled]="false"
+            (click)="addOrderByColumn()"
+            color="primary"
+        >
+            + Add Order By Column
+        </button>
+    </div>
+    <div
+        class="flex flex-col justify-between"
+        [formGroup]="orderByForm"
+        [ngClass]="{
+            card: isCard()
+        }"
+    >
+        <!-- <button>click</button> -->
+        <div class="" formArrayName="orderByFormArray">
+            <div
+                style="position: relative"
+                *ngFor="
+                    let config of orderByFormArray.controls;
+                    let idx = index
+                "
+                [formGroupName]="idx"
+            >
+                <div class="main-content">
+                    <div class="order-by-row">
+                        <stl-single-select-dropdown
+                            [label]="'Table'"
+                            [showLabel]="idx === 0"
+                            [inputData]="(alreadySelectedTableList$ | async)||[]"
+                            [selectedData]="
+                                this.orderByFormArray.at(idx).get('tableName')
+                                    ?.value ?? '-1'
+                            "
+                            [defaultDropDownData]="'Select a Table'"
+                            (selectedItem)="onSelectTable($event, idx)"
+                        ></stl-single-select-dropdown>
+                        <stl-single-select-dropdown
+                            [label]="'Column'"
+                            [showLabel]="idx === 0"
+                            [inputData]="
+                                queryBuilderService.getAllColumnListByTable(
+                                    this.orderByFormArray
+                                        .at(idx)
+                                        .get('tableName')?.value ?? ''
+                                ) || []
+                            "
+                            [selectedData]="
+                                this.orderByFormArray.at(idx).get('columnName')
+                                    ?.value ?? '-1'
+                            "
+                            [defaultDropDownData]="'Select a Column'"
+                            (selectedItem)="onSelectTableColumn($event, idx)"
+                        ></stl-single-select-dropdown>
+                        <stl-single-select-dropdown
+                            [label]="'Order Type'"
+                            [showLabel]="idx === 0"
+                            [inputData]="orderTypes"
+                            [defaultDropDownData]="'Select a Type'"
+                            [selectedData]="
+                                this.orderByFormArray.at(idx).get('orderType')
+                                    ?.value ?? '-1'
+                            "
+                            (selectedItem)="onSelectOrderType($event, idx)"
+                        ></stl-single-select-dropdown>
+                    </div>
+                    <div class="order-by-delete">
+                        <mat-icon
+                            matTooltip="Delete"
+                            (click)="removeOrderByColumn(idx)"
+                        >
+                            delete
+                        </mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

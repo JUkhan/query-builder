@@ -1,0 +1,17 @@
+.disabled-div {
+    pointer-events: none;
+    opacity: 0.7;
+}
+::ng-deep .stl-edit-plan-preview stl-datepicker .mat-form-field-wrapper .mat-icon-button{
+    min-height: 30px;
+    max-height: 30px;
+}
+::ng-deep .stl-edit-plan-preview stl-datepicker .mat-form-field-wrapper .selected-dates-container {
+    grid-gap: 0px;
+}
+::ng-deep .stl-edit-plan-preview stl-datepicker .mat-form-field-wrapper .selected-date {
+    border-radius: 5px;
+}
+::ng-deep .stl-edit-plan-preview stl-datepicker .mat-form-field-wrapper .mat-form-field-flex{
+    padding: 3px 2px!important;
+}

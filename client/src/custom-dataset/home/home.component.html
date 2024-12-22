@@ -1,0 +1,10 @@
+
+<stl-grid 
+    title="Custom Dataset"
+    [columnDefs]="colDef"
+    [rowData]="rowData"
+    [getRowId]="getRowId"
+    [rowModelType]="'clientSide'"
+    (createDataEmitter)="newDataSet()"
+    >
+</stl-grid>

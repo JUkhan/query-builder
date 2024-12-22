@@ -1,0 +1,146 @@
+<div class="select-case-main-container">
+    <div style="text-align: right">
+        <button
+            mat-button
+            class="mat-focus-indicator px-6 ml-3 mat-flat-button mat-button-base mat-primary mb-1"
+            [disabled]="false"
+            (click)="addCase()"
+            color="primary"
+        >
+            + Add Case
+        </button>
+    </div>
+    <div
+        class="flex flex-col justify-between"
+        [formGroup]="caseForm"
+        [ngClass]="{
+            card: isCard()
+        }"
+    >
+        <!-- <button>click</button> -->
+        <div class="" formArrayName="caseFormArray">
+            <div
+                style="position: relative"
+                *ngFor="let config of caseFormArray.controls; let i = index"
+                [formGroupName]="i"
+            >
+                <div class="main-content">
+                    <mat-expansion-panel
+                        [expanded]="caseConfigIndex === i"
+                        (opened)="setStep(i)"
+                        style="width: 98%"
+                    >
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <span class="label label-default">
+                                    Case - {{ i + 1 }}</span
+                                >
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <mat-icon
+                                style="
+                                    position: absolute;
+                                    right: 3px;
+                                    top: 1px;
+                                    cursor: pointer;
+                                "
+                                (click)="removeCase(i)"
+                                >close</mat-icon
+                            >
+                            <div class="wrapper">
+                                <div class="header-button-container">
+                                    <button
+                                        mat-button
+                                        class="small-button mat-focus-indicator mat-flat-button mat-button-base mat-primary mb-1"
+                                        [disabled]="disableWhenButton(i)"
+                                        (click)="addWhen(i)"
+                                        color="primary"
+                                    >
+                                        + Add When
+                                    </button>
+                                    <button
+                                        mat-button
+                                        class="small-button mat-focus-indicator mat-flat-button mat-button-base mb-1"
+                                        [disabled]="disableElseButton(i)"
+                                        (click)="addElse(i)"
+                                        color="accent"
+                                    >
+                                        + Add Else
+                                    </button>
+                                </div>
+                                <div
+                                    class="case-conditions"
+                                    formArrayName="conditionsFormArray"
+                                >
+                                    <div
+                                        class="case-condition"
+                                        *ngFor="
+                                            let condition of conditionsFormArray(
+                                                i
+                                            ).controls;
+                                            let idx = index
+                                        "
+                                        [formGroupName]="idx"
+                                    >
+                                        <div class="case-table-row">
+                                            <app-where-condition
+                                                *ngIf="
+                                                    isWhenCondition(
+                                                        this.conditionsFormArray(i).at(idx)
+                                                    )
+                                                "
+                                                [filterConditionsForm]="
+                                                    getForm(this.conditionsFormArray(i)
+                                                        .at(idx)
+                                                        .get(
+                                                            'filterConditionsForm'
+                                                        ))
+                                                "
+                                                [populateFromStore]="false"
+                                            ></app-where-condition>
+                                            <app-result
+                                                [resultForm]="
+                                                   getForm( this.conditionsFormArray(i)
+                                                        .at(idx)
+                                                        .get('resultForm'))
+                                                "
+                                            ></app-result>
+                                        </div>
+                                        <div class="case-condition-delete">
+                                            <mat-icon
+                                                matTooltip="Remove When/Else"
+                                                (click)="
+                                                    removeJoinCondition(i, idx)
+                                                "
+                                            >
+                                                delete
+                                            </mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                                <mat-form-field class="flex-auto w-full">
+                                    <mat-label>Column Name</mat-label>
+                                    <input
+                                        type="text"
+                                        matInput
+                                        formControlName="columnName"
+                                        required
+                                    />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                    <div class="case-condition-delete">
+                        <mat-icon
+                            matTooltip="Remove Case"
+                            (click)="removeCase(i)"
+                        >
+                            delete
+                        </mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

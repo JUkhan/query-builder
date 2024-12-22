@@ -1,0 +1,66 @@
+<div class="p-3 rounded-lg stl-edit-plan-preview">
+    <div class="mt-3">
+        <div class="flex">
+            <mat-form-field class="w-full">
+                <mat-label>File Name</mat-label>
+
+                <input
+                [(ngModel)]="updatedFileName"
+                [formControl]="fileNameFormControl"
+                name="fileName"
+                    matInput
+                    required
+                />
+                <mat-error *ngIf="fileNameFormControl.hasError('required')">
+                    File Name is required
+                </mat-error>
+                <mat-error *ngIf="fileNameFormControl.hasError('invalidFileName')">
+                    File Name must end with '.xlsx'
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="flex">
+            <mat-form-field class="w-full">
+                <mat-label>Status</mat-label>
+
+                <input
+                [value]="file.status"
+                matInput
+                [readonly]="true"
+                />
+            </mat-form-field>
+        </div>
+        <div class="flex">
+            <mat-form-field class="w-full">
+                <mat-label>Create Time</mat-label>
+
+                <input
+                    [value]="file.createdTime"
+                    matInput
+                    [readonly]="true"
+                />
+            </mat-form-field>
+        </div>    
+    </div>
+
+    <div class="flex justify-end">
+        <button
+            [color]="'warn'"
+            class="mat-focus-indicator px-6 ml-3 mt-2 mat-flat-button mat-button-base mat-primary"
+            mat-flat-button
+            (click)="closeDialog()"
+        >
+            Close
+        </button>
+        <button
+            [color]="'primary'"
+            type="submit"
+            class="mat-focus-indicator px-6 ml-3 mt-2 mat-flat-button mat-button-base mat-primary"
+            mat-flat-button
+            (click)="updateDisplayName()"
+            [disabled]="fileNameFormControl.invalid"
+        >
+           Save
+        </button>
+    </div>
+</div>

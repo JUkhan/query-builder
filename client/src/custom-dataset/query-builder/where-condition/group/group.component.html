@@ -1,0 +1,57 @@
+<div [formGroup]="filterConditionsForm" class="main-container">
+    <div class="buttons-row">
+        <div>
+            <mat-button-toggle-group
+                [formControl]="typeCheck(filterConditionsForm.get('condition'))"
+                class="toggle-group"
+            >
+                <mat-button-toggle value="and" class="toggle-button"
+                    >AND</mat-button-toggle
+                >
+                <mat-button-toggle value="or" class="toggle-button"
+                    >OR</mat-button-toggle
+                >
+            </mat-button-toggle-group>
+        </div>
+
+        <div>
+            <button mat-button [matMenuTriggerFor]="addConditionOrGroup">
+                <mat-icon>add</mat-icon> Add
+            </button>
+            <mat-menu #addConditionOrGroup="matMenu">
+                <button mat-menu-item (click)="addGroup(filterConditionsForm)">
+                    <mat-icon>add</mat-icon> Add Group
+                </button>
+                <button
+                    mat-menu-item
+                    (click)="addCondition(filterConditionsForm)"
+                >
+                    <mat-icon>add</mat-icon> Add Condition
+                </button>
+            </mat-menu>
+        </div>
+        <div class="delete-group" *ngIf="!isFirstGroup">
+            <mat-icon (click)="removeGroup()" [matTooltip]="'Remove Group'">
+                delete
+            </mat-icon>
+        </div>
+    </div>
+    <div class="" formArrayName="rulesFormArray" class="conditions">
+        <div
+            *ngFor="let config of rulesFormArray.controls; let idx = index"
+            [formGroupName]="idx"
+        >
+            <app-condition
+                *ngIf="isCondition(rulesFormArray.at(idx))"
+                [conditionsFormArray]="rulesFormArray"
+                [index]="idx"
+            ></app-condition>
+            <app-condition-group
+                *ngIf="!isCondition(rulesFormArray.at(idx))"
+                [filterConditionsForm]="typeCheck(rulesFormArray.at(idx))"
+                [parentFormArray]="rulesFormArray"
+                [index]="idx"
+            ></app-condition-group>
+        </div>
+    </div>
+</div>

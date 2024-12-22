@@ -1,0 +1,9 @@
+@if (group) {
+  <div fResizeHandle [fResizeHandleType]="eResizeHandleType.RIGHT_TOP"></div>
+  <div class="interactive-group-body selected-background" [style.border-color]="group.color" [style.color]="group.color">
+    
+    <div [style.border-color]="group.color" class="title">{{group.name}}</div>
+    
+  </div>
+}
+

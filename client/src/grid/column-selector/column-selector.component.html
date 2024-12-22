@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="headerBox">
+      <div class="buttonsBox">
+          <button mat-button color="primary" (click)="selectAll()">
+              ✓ Select All
+          </button>
+          <button mat-button color="primary" (click)="selectNone()">
+              × Select None
+          </button>
+          <button mat-raised-button color="warn" (click)="reset()">
+              <span>↶ Reset</span>
+          </button>
+          
+      </div>
+      <div class="">
+          
+          <mat-form-field class="w-full">
+              <input
+                  #SearchColumnInput
+                  appInputFocus
+                  matInput
+                  placeholder="Search..."
+                  autocomplete="off"
+                  (keyup)="applyFilter($event)"
+              />
+              <button matSuffix mat-icon-button aria-label="Clear" *ngIf="checkColumnInputValue()" (click)="clearSearchBox()">
+                  <mat-icon>close</mat-icon>
+              </button>
+          </mat-form-field>
+      </div>
+      <div class="column-numbers">
+          <p>Total: {{columnDefs.length}}</p>
+          <p>Displayed: {{getCheckedLen()}}</p>
+      </div>
+  </div>
+  <div class="columnsBox">
+      <mat-grid-list cols="1" rowHeight="1:0.09">
+          <div *ngFor="let column of filteredColumns; let i = index">
+          <mat-grid-tile
+              class="columnDiv"
+              (click)="toggleDisplayValue(column)"
+          >
+              <div class="span-container">
+                  <span class="display-name-container ellipsis" [matTooltip]='column.headerName'>{{ column.headerName }}</span>
+                  <span *ngIf="column.visible">✓</span>
+              </div>
+          </mat-grid-tile>
+      </div>
+      </mat-grid-list>
+  </div>
+</div>
