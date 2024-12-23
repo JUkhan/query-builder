@@ -313,6 +313,8 @@ export class QueryBuilderComponent implements OnInit, OnDestroy {
 
     onJoinConfigurationChange(data: JoinConfig[]) {
         this.joinConditions = data;
+        console.log('joinConditions::::', data);
+        this.queryBuilderStore.QueryBuilderState$.subscribe(res=>console.log(res))
     }
 
     onFilterConditionChange(data: any) {

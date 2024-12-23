@@ -167,7 +167,7 @@ export class AllQueriesComponent implements OnInit, OnDestroy {
         this.queryBuilderStore.patchState({
             currentQueryIndex: index,
         });
-
+        //QueryBuilderComponent
         this.dialog
             .open(FlowComponent, {
                 data: {

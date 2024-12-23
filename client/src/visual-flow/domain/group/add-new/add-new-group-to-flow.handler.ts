@@ -12,7 +12,7 @@ export class AddNewGroupToFlowHandler
 
   public handle(request: AddNewGroupToFlowRequest): IFlowGroupStorageModel {
     const group: IFlowGroupStorageModel = {
-      id: request.name + Number(Date.now()),
+      id: request.name + '-'+ Number(Date.now()),
       name: request.name,
       properties: { type: request.type },
       position: request.position,

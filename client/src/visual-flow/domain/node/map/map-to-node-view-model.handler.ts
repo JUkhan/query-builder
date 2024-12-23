@@ -25,14 +25,15 @@ export class MapToNodeViewModelHandler implements IHandler<void, IFlowNodeViewMo
         name: col,
       };
       node.groupId=group.id;
-      if ((group.properties["type"] as EGroupType) === EGroupType.LeftTable) {
+      /*if ((group.properties["type"] as EGroupType) === EGroupType.LeftTable) {
         node.output = `${group.id}-${col}-${idx}`;
       } else {
         node.input = `${group.id}-${col}-${idx}`;
-      }
+      }*/
+      node.output = `${group.id}-${col}-${idx}`;
+      node.input = `${group.id}-${col}-${idx}`;
       node.position = { x: group.position.x + 7, y: posY };
       posY += 28;
-      console.log(node)
       nodes.push(node as any);
     });
     

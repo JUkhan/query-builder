@@ -6,7 +6,7 @@
         (fCreateNode)="onNodeAdded($event)">
   <f-background>
     <f-circle-pattern></f-circle-pattern>
-  </f-background>
+  </f-background> 
   <f-line-alignment></f-line-alignment>
   <f-canvas fZoom>
     <f-connection-for-create fBehavior="floating" fType="straight">
@@ -17,8 +17,9 @@
         <path d="M0,0 L6,3 0,6Z" stroke="none" fill="var(--primary-3)"></path>
       </svg>
     </f-connection-for-create>
-    @for (connection of viewModel.connections;track connection.to) {
-      <f-connection fBehavior="floating" (click)="onConnectionClick(connection)"
+    
+    @for (connection of viewModel().connections; track connection) {
+      <f-connection fBehavior="floating" (click)="onConnectionClick(connection)" 
                     fType="straight"
                     [fText]="connection.text"
                     [fStartColor]="connection.color1" [fEndColor]="connection.color2"
@@ -39,7 +40,7 @@
       </f-connection>
     }
     
-    @for (group of viewModel.groups;track group.id) {
+    @for (group of viewModel().groups;track group.id) {
       <visual-programming-group [group]="group"
                                fGroup (click)="onGroupClick(group)"
                                [fGroupId]="group.id"
@@ -51,7 +52,7 @@
       </visual-programming-group>
     }
 
-    @for (node of viewModel.nodes;track node.id) {
+    @for (node of viewModel().nodes;track node.id) {
       <visual-programming-node [node]="node"
                                fNode
                                [fNodeParentId]="node.groupId"
@@ -66,3 +67,4 @@
 </f-flow>
 <visual-programming-toolbar></visual-programming-toolbar>
 <visual-programming-property [selectedConnection]="selectedConnection" [selectedGroup]="selectedGroup"></visual-programming-property>
+<app-flow-nav></app-flow-nav>

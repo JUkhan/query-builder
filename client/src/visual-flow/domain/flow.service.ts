@@ -26,16 +26,7 @@ import { IFlowGroupStorageModel } from "./group/i-flow-group-storage-model";
 
 @Injectable()
 export class FlowService {
-  private flow: IFlowStorage = FLOW_STORAGE;
-
-  
-  public refreshData() {
-    this.flow={
-      ...this.flow,
-      connections:[...this.flow.connections],
-      groups:[...this.flow.groups]
-    }
-  }
+  public flow: IFlowStorage = {connections:[], groups:[], nodes:[]};
   public changeJoin(
     connection: IFlowConnectionViewModel,
     joinName: string

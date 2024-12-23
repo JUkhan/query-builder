@@ -2,13 +2,15 @@ import {
   ChangeDetectionStrategy,
   Component,
 } from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
 import { FlowComponent } from '../flow/flow.component';
 
 @Component({
   selector: 'visual-programming-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: [ './toolbar.component.scss' ],
-  standalone: true,
+  imports:[MatIconModule,MatButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToolbarComponent {

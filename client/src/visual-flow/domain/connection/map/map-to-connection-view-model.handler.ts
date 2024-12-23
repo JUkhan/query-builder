@@ -15,14 +15,11 @@ export class MapToConnectionViewModelHandler implements IHandler<void, IFlowConn
   }
 
   public handle(): IFlowConnectionViewModel[] {
-    return this.getConnections().map((x) => {
+    return this.flow.connections.map((x) => {
       return this.mapConnection(x, this.getFromNode(x), this.getToNode(x));
     });
   }
-
-  private getConnections(): IFlowConnectionStorageModel[] {
-    return this.flow.connections;
-  }
+  
   private operators=QueryBuilderConstants.RELATION_OPERATORS.reduce((acc, it)=>{
     acc[it.value]=it.label
     return acc;
@@ -58,7 +55,8 @@ export class MapToConnectionViewModelHandler implements IHandler<void, IFlowConn
   }
 
   private getNodes(fromToId: string): IFlowNodeStorageModel[] {
-    const groupId=fromToId.split('-')[0]
+    const arr=fromToId.split('-');
+    const groupId=`${arr[0]}-${arr[1]}`
     return this.flow.nodes.filter(n=>n.groupId===groupId);
   }
 }

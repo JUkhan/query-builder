@@ -2,13 +2,13 @@
   <div class="container">
     <div>{{selectedGroup.name}}</div>
     
-    <mat-form-field>
+    <!-- <mat-form-field>
       <mat-label>Select table type</mat-label>
       <mat-select (selectionChange)="typeChange($event.value)" [(value)]="selectedGroup.properties['type']">
         <mat-option value="left-table">Left Table</mat-option>
         <mat-option value="right-table">Right Table</mat-option>
       </mat-select>
-    </mat-form-field>
+    </mat-form-field> -->
     <button mat-stroked-button (click)="removeTable()">Remove</button>
   </div>
 }
