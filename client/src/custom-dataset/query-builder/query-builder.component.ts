@@ -322,10 +322,12 @@ export class QueryBuilderComponent implements OnInit, OnDestroy {
     }
 
     onSelectCaseChange(data: SelectCase[]) {
+        console.log('------onSelectCaseChange-------',data)
         this.selectCases = data;
     }
 
     onCalculatedColumnFormValueChange(data: CalculatedColumn[]) {
+        console.log('------onCalculatedColumnFormValueChange-------',data)
         this.calculatedColumns = data;
     }
 

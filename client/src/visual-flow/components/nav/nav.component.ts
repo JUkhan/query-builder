@@ -9,8 +9,8 @@ import {
 import { QueryBuilderStore } from '../../../custom-dataset/query-builder/utils/query-builder.store';
 import { QueryBuilderService } from '../../../custom-dataset/query-builder/utils/services/query-builder.service';
 import { WhereConditionComponent } from '../../../custom-dataset/query-builder/where-condition/where-condition.component';
-import { SelectColumnsComponent } from '../../../custom-dataset/query-builder/select-columns/select-columns.component';
 import { OrderByComponent } from '../../../custom-dataset/query-builder/order-by/order-by.component';
+import { SelectContainerComponent } from '../../../custom-dataset/query-builder/select-container/select-container.component';
 
 @Component({
   selector: 'app-flow-nav',
@@ -36,11 +36,11 @@ export class NavComponent {
     //this.saveFullJsonDataToStore(generatedQuery);
   }
   onOpenFilterConditions(){
-    //this.buttomSheet.open(WhereConditionComponent)
+    this.buttomSheet.open(WhereConditionComponent);
     this.queryBuilderStore.QueryBuilderState$.subscribe(res=>console.log(res))
   }
   onOpenSelectColumns(){
-    this.buttomSheet.open(SelectColumnsComponent)
+    this.buttomSheet.open(SelectContainerComponent)
   }
   openOrderBy(){
     this.buttomSheet.open(OrderByComponent)

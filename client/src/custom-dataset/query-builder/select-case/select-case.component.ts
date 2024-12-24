@@ -87,7 +87,7 @@ export class SelectCaseComponent implements OnInit, OnDestroy, OnChanges {
     private initCaseFormData(fullJsonData: any) {
         const { selectCases } = fullJsonData;
 
-        selectCases.forEach((selectCase: any, index: number) => {
+        selectCases?.forEach((selectCase: any, index: number) => {
             let conditionsFormArray = this.formBuilder.array([]) as FormArray;
 
             selectCase.conditionsFormArray.forEach((condition: any) => {

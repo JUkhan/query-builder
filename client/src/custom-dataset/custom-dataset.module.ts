@@ -53,6 +53,7 @@ import {FormsModule} from '@angular/forms'
 import {DropdownSearchInputFocusDirective} from './directives/dropdown-search-input.directive'
 import {DynamicComponentLoaderDirective} from './directives/dynamic-component-loader.directive'
 import {CloseMatInputOnOutsideClickDirective} from './directives/edit-component-loader'
+import { SelectContainerComponent } from './query-builder/select-container/select-container.component';
 
 const userRoutes: Route[] = [
     {
@@ -104,7 +105,7 @@ const userRoutes: Route[] = [
         CloseMatInputOnOutsideClickDirective,
         DynamicComponentLoaderDirective,
         DropdownSearchInputFocusDirective,
-
+        SelectContainerComponent
     ],
     imports: [
     CommonModule,

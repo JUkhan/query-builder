@@ -39,6 +39,7 @@ export class WhereConditionComponent implements OnInit, OnDestroy {
         const fullJsonData = this.queryBuilderStore.getFullJsonData(
             this.queryBuilderStore.getCurrentQueryIndex()
         );
+        if(fullJsonData && !fullJsonData.filterConditions)fullJsonData.filterConditions={}
         if (fullJsonData && this.populateFromStore) {
             this.initFilterConditionsFormData(fullJsonData);
         }
@@ -51,6 +52,16 @@ export class WhereConditionComponent implements OnInit, OnDestroy {
 
     onFilterConditionChanged(data: any) {
         this.filterConditionChanged.emit(data);
+        let allQueries = this.queryBuilderStore.getAllQueries();
+        
+        if(this.queryBuilderStore.getCurrentQueryIndex()!==allQueries.length-1){
+            allQueries[this.queryBuilderStore.getCurrentQueryIndex()]={filterConditions:data} as any
+        }else{
+            allQueries[this.queryBuilderStore.getCurrentQueryIndex()]={...allQueries[this.queryBuilderStore.getCurrentQueryIndex()], filterConditions:data} 
+        }
+        this.queryBuilderStore.patchState({
+            allQueries: allQueries,
+        });
     }
 
     createConditions(rules: any[]): FormGroup[] {
@@ -78,7 +89,6 @@ export class WhereConditionComponent implements OnInit, OnDestroy {
 
     private initFilterConditionsFormData(fullJsonData: any) {
         const { filterConditions } = fullJsonData;
-
         this.filterConditionsForm = this.formBuilder.group({
             condition: [filterConditions.condition],
             rulesFormArray: this.formBuilder.array(

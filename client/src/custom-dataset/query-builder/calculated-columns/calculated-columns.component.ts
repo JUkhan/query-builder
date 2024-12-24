@@ -70,7 +70,7 @@ export class CalculatedColumnsComponent implements OnInit, OnDestroy {
 
     private initCalculatedColumnsFormData(fullJsonData: any) {
         const { calculatedColumns } = fullJsonData;
-        calculatedColumns.forEach(
+        calculatedColumns?.forEach(
             (calculatedColumn: CalculatedColumn) => {
                 this.calculatedColumnsFormArray.push(
                     this.formBuilder.group({

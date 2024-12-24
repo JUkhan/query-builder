@@ -1,0 +1,23 @@
+<div class="group-by">
+    <mat-checkbox
+        [checked]="
+            this.queryBuilderForm.controls['ApplyGroupBy'].value
+        "
+        (change)="toggleGroupByCheckbox($event)"
+    >
+        Apply Group By
+    </mat-checkbox>
+</div>
+<app-select-columns
+    [tableWiseSelectedColumnsForm]="
+        tableWiseSelectedColumnsForm
+    "
+></app-select-columns>
+<app-select-case
+    (selectCaseChanged)="onSelectCaseChange($event)"
+></app-select-case>
+<app-calculated-columns
+    (calculatedColumnFormValueChanged)="
+        onCalculatedColumnFormValueChange($event)
+    "
+></app-calculated-columns>

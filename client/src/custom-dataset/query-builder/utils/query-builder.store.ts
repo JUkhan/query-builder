@@ -70,4 +70,17 @@ export class QueryBuilderStore extends ComponentStore<QueryBuilderState> {
             (col: SelectClauseCol) => col.fullClause
         );
     }
+
+    public patchStateAllQueries(key:string, value: any){
+        let allQueries = this.getAllQueries();
+            
+            if(this.getCurrentQueryIndex()!==allQueries.length-1){
+                allQueries[this.getCurrentQueryIndex()]={[key]:value} as any
+            }else{
+                allQueries[this.getCurrentQueryIndex()]={...allQueries[this.getCurrentQueryIndex()], [key]:value} 
+            }
+            this.patchState({
+                allQueries: allQueries,
+            });
+      }
 }

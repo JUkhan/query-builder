@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
 //import { FuseConfirmationService } from '@streamstech/ui-sdk/fuse/services';
 import { BehaviorSubject, debounceTime, Subject, takeUntil } from 'rxjs';
@@ -14,7 +14,7 @@ import { OrderByOptionEnum } from '../utils/enums';
     templateUrl: './order-by.component.html',
     styleUrls: ['./order-by.component.scss'],
 })
-export class OrderByComponent implements OnInit {
+export class OrderByComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
     alreadySelectedTableList$ = new BehaviorSubject<IDropdownData[]>([]);
     orderByForm!: FormGroup;
@@ -44,6 +44,7 @@ export class OrderByComponent implements OnInit {
         const fullJsonData = this.queryBuilderStore.getFullJsonData(
             this.queryBuilderStore.getCurrentQueryIndex()
         );
+        
         if (fullJsonData) {
             this.initOrderByFormData(fullJsonData);
         }
@@ -52,6 +53,7 @@ export class OrderByComponent implements OnInit {
     ngOnDestroy(): void {
         this.destroy$.next();
         this.destroy$.complete();
+        this.queryBuilderStore.patchStateAllQueries('orderByColumns', this.orderByFormArray.value);
     }
 
     private initSelectedTableList() {
@@ -75,7 +77,7 @@ export class OrderByComponent implements OnInit {
 
     private initOrderByFormData(fullJsonData: any) {
         const { orderByColumns } = fullJsonData;
-        orderByColumns.forEach((orderByColumn: OrderByColumn) => {
+        orderByColumns?.forEach((orderByColumn: OrderByColumn) => {
             this.orderByFormArray.push(
                 this.formBuilder.group({
                     tableName: [orderByColumn.tableName],
@@ -86,6 +88,7 @@ export class OrderByComponent implements OnInit {
         });
 
         this.orderByConfigChanged.emit(orderByColumns);
+        
     }
 
     get orderByFormArray(): FormArray {

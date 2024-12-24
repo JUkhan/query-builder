@@ -30,6 +30,18 @@ export class SelectColumnsComponent implements OnInit, OnDestroy {
         return val;
     }
     ngOnDestroy(): void {
+        
+        let allQueries = this.queryBuilderStore.getAllQueries();
+        
+        if(this.queryBuilderStore.getCurrentQueryIndex()!==allQueries.length-1){
+            allQueries[this.queryBuilderStore.getCurrentQueryIndex()]={selectedTableToColumnsMap:this.tableWiseSelectedColumnsForm.value} as any
+        }else{
+            allQueries[this.queryBuilderStore.getCurrentQueryIndex()]={...allQueries[this.queryBuilderStore.getCurrentQueryIndex()], selectedTableToColumnsMap:this.tableWiseSelectedColumnsForm.value} 
+        }
+        this.queryBuilderStore.patchState({
+            allQueries: allQueries,
+        });
+        
         this.destroy$.next();
         this.destroy$.complete();
     }
