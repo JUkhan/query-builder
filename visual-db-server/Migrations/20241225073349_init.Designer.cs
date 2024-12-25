@@ -12,7 +12,7 @@ using chatApp.DB;
 namespace visual_db_server.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    [Migration("20241220060245_init")]
+    [Migration("20241225073349_init")]
     partial class init
     {
         /// <inheritdoc />

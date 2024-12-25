@@ -1,6 +1,7 @@
 ﻿using chatApp.DB;
 using chatApp.Hubs;
 using chatApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace chatApp.Seed
 {
@@ -12,8 +13,12 @@ namespace chatApp.Seed
             using(var serviceScope = builder.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<ChatDbContext>();
-                
+                var connectionString = context.Database.GetDbConnection().ConnectionString;
                 context.Database.EnsureCreated();
+
+                ChatDbContext.EnsureSchemaExists(connectionString);
+
+                
 
                 if(!context.Registers.Any())
                 {

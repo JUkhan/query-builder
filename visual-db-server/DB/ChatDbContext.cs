@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,10 +16,39 @@ namespace chatApp.DB
 
         public DbSet<Process> Processes { get; set; }
 
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasDefaultSchema("customdataset");
+            base.OnModelCreating(modelBuilder);
+        }*/
+
+        public static void EnsureSchemaExists(string connectionString)
+        {
+            using (var connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+                using (var command = new NpgsqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandText = @"
+                    DO $$
+                    BEGIN
+                        IF NOT EXISTS (SELECT 1 FROM pg_namespace WHERE nspname = 'customdataset') THEN
+                            CREATE SCHEMA customdataset;
+                        END IF;
+                    END
+                    $$;";
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 
 
-    public interface IEntity<TKey>
+
+
+
+public interface IEntity<TKey>
     {
         TKey Id { get; set; }
     }

@@ -105,7 +105,7 @@ public class CustomDataSetCrudService: ICustomDataSetCrudService
 
     private bool CanCreateTable(CustomDataset postModel)
     {
-        return true;
+        
         var tableName = postModel.DatasetName!.ToLower();
 
         try
