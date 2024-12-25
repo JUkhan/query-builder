@@ -53,6 +53,7 @@ export class ColumnOrderingComponent implements OnInit, OnDestroy {
     }
 
     private initColumns(): void {
+        console.log('init-columns::::::')
         this.selectClausePartsArray =
             this.queryBuilderService.generateSelectClauseColumnsArray({
                 tableWiseSelectedColumnsForm: this.tableWiseSelectedColumnsForm,

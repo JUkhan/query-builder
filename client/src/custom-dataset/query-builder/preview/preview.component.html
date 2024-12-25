@@ -1,0 +1,16 @@
+
+<app-column-ordering
+    [tableWiseSelectedColumnsForm]="tableWiseSelectedColumnsForm"
+    [selectCases]="selectCases"
+    [calculatedColumns]="calculatedColumns"
+    (columnOrderChanged)="onColumnOrderChange($event)"
+></app-column-ordering>
+
+<stl-grid
+    [showCreateButton]="false"
+    [columnDefs]="previewTableConfig"
+    [rowModelType]='"clientSide"'
+    [rowData]="previewTableData"
+    [title]='"Query Result"'
+>
+</stl-grid>

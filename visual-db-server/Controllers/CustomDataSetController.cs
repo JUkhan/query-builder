@@ -120,6 +120,14 @@ public class CustomDataSetController : BaseController
         return JsonNet(await _customDataSetCrudService.GetById(id));
     }
 
+    [HttpGet("Delete/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Delete(string id)
+    {
+        return JsonNet(await _customDataSetCrudService.Delete(id));
+    }
+
     [HttpPost("GetPreviewData")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

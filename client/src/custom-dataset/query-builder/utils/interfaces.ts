@@ -29,6 +29,8 @@ export interface QueryBuilderJSON {
     orderByColumns: OrderByColumn[];
     selectClauseCols: SelectClauseCol[];
     webQuery: string;
+    flowConnections:string;
+    flowTables:string
 }
 
 export interface Result {

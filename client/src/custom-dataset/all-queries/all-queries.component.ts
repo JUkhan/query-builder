@@ -118,7 +118,7 @@ export class AllQueriesComponent implements OnInit, OnDestroy {
             .afterClosed()
             .pipe(takeUntil(this.destroy$))
             .subscribe((result) => {
-                if (result === 'confirmed') {
+                if (result) {
                     this.allQueryFormArray.removeAt(index);
                     let allQueries = this.queryBuilderStore.getAllQueries();
                     let selectedTablesMapList =

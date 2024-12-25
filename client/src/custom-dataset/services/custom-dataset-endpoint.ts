@@ -8,6 +8,8 @@ export class CustomDatasetApiEndpoints {
         environment.coreApiUrl + 'CustomDataset/Insert';
     public readonly updateCustomDatasetUrl =
         environment.coreApiUrl + 'CustomDataset/Update';
+        public readonly deleteCustomDatasetUrl =
+        environment.coreApiUrl + 'CustomDataset/Delete';
     public readonly getTableColumnsUrl =
         environment.coreApiUrl + 'Table/GetTableColumns';
     public readonly getCustomDatasetUrl =

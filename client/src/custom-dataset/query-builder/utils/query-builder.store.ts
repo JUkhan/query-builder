@@ -9,6 +9,7 @@ export interface QueryBuilderState {
     tableToColumnDataTypeMap: Map<string, any>;
     allQueries: QueryBuilderJSON[];
     selectClauseCols: SelectClauseCol[];
+    sourceTable:string,
 }
 
 @Injectable({
@@ -26,6 +27,7 @@ export class QueryBuilderStore extends ComponentStore<QueryBuilderState> {
             tableToColumnDataTypeMap: new Map<string, any>(),
             allQueries: [],
             selectClauseCols: [],
+            sourceTable:'',
         });
     }
 
@@ -83,4 +85,7 @@ export class QueryBuilderStore extends ComponentStore<QueryBuilderState> {
                 allQueries: allQueries,
             });
       }
+    public getSourceTable(){
+        return this.get().sourceTable;
+    }
 }

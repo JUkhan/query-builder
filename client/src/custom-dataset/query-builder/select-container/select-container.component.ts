@@ -54,6 +54,7 @@ export class SelectContainerComponent {
     this.initTableWiseSelectedColumnsForm(
         fullJsonData?.selectedTableToColumnsMap
     );
+    
 }
 
 private initTableWiseSelectedColumnsForm(

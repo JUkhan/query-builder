@@ -7,7 +7,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild,
+  ViewChild, inject
 } from '@angular/core';
 import {
   FormGroup,
@@ -36,10 +36,7 @@ import { QueryBuilderJSON } from '../query-builder/utils/interfaces';
 import { toTitleCase } from '../../grid/case-conversion';
 import { ColDef } from 'ag-grid-community';
 import { MneGrid } from '../../grid/stl-grid/stl-grid.component';
-//import { QueryBuilderService } from '../query-builder/utils/services/query-builder.service';
-//import { IValueLabel } from 'app/modules/landing-page-control/landing-page-control.dto';
-//import {SystemSettingsService} from "../../system-settings/services/system-settings-service.service";
-//import {SurveyEndpoints} from "../../../config/apiEndpoints";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 interface INameLabel {
   name: string;
@@ -58,7 +55,7 @@ export class CustomDatasetFormComponent implements OnInit, OnDestroy {
   @Input() formData: any = {};
   @Output() dataEmitter = new EventEmitter();
   @Output() cancelClickEmitter = new EventEmitter<void>();
-
+  private _snackBar = inject(MatSnackBar);
   previousFormData: any = {};
 
   title: string = CustomDatasetConstants.DATASET_ADD_TITLE;
@@ -205,16 +202,12 @@ export class CustomDatasetFormComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: any) => {
             this.goBack();
-            //this.messageService.showSuccessMessage();
-            alert('Success');
+            this._snackBar.open(ConstantService.Message.SAVED_SUCCESSFUL, '', {duration:3000, verticalPosition:'top'});
             this.FullJsonData = '';
             this.emptifyQueryBuilderStore();
         },
         error: (e) => {
-          //show failure message
-          //this.messageService.showError();
-          alert('Error');
-          console.error(e);
+          this._snackBar.open(ConstantService.Message.SAVED_FAIL_TITLE, '', {duration:3000, verticalPosition:'top'});
         },
         complete: () => console.info('complete'),
       });
@@ -337,10 +330,10 @@ export class CustomDatasetFormComponent implements OnInit, OnDestroy {
                     this.datasetStepper.selectedIndex
                 )
             );*/
-      alert(
+      this._snackBar.open(
         this.getProceedRestrictionWarningMessage(
           this.datasetStepper.selectedIndex
-        )
+        ),'',{duration:3000, verticalPosition:'top'}
       );
     }
   }
@@ -416,8 +409,7 @@ export class CustomDatasetFormComponent implements OnInit, OnDestroy {
   
   private generatePreviewTableConfig() {
     this.previewTableConfig = [];
-    let firstQueryFullJson: QueryBuilderJSON =
-      this.queryBuilderStore.getAllQueries()[0];
+    let firstQueryFullJson: QueryBuilderJSON = this.queryBuilderStore.getAllQueries()[0];
     firstQueryFullJson.selectClauseCols.forEach((column) => {
       this.previewTableConfig.push({
         field: column.columnName,

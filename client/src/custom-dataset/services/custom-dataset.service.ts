@@ -125,4 +125,9 @@ export class CustomDatasetService {
             surveyPermissionPayload
         );
     }
+    deleteCustomDataSet(customDatasetId:string){
+        return this.apiService.get(
+            `${this.apiEndPoints.deleteCustomDatasetUrl}/${customDatasetId}`
+        );
+    }
 }

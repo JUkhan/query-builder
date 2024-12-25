@@ -23,4 +23,5 @@ public interface ICustomDataSetCrudService
     Task<IReadOnlyList<CustomDataset>> GetAll();
 
     Task<CustomDataset> GetById(string id);
+    Task<dynamic> Delete(string id);
 }

@@ -336,6 +336,7 @@ export class QueryBuilderComponent implements OnInit, OnDestroy {
     }
 
     onColumnOrderChange(data: SelectClauseCol[]) {
+        console.log('____________________________')
         this.selectClauseCols = data;
         this.queryBuilderStore.patchState({
             selectClauseCols: this.selectClauseCols,

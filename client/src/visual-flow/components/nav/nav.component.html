@@ -2,4 +2,4 @@
 <button mat-stroked-button (click)="onOpenSelectColumns()">Select Columns</button>
 <button mat-stroked-button (click)="openOrderBy()">Order By</button>
 <button mat-stroked-button (click)="openPreview()">Preview</button>
-<button mat-stroked-button (click)="onSave()">Save</button>
+<button [disabled]="isSaveDisabled" mat-stroked-button (click)="onSave()">Save</button>

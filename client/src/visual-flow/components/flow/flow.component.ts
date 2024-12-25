@@ -70,7 +70,7 @@ export class FlowComponent implements OnInit, AfterViewInit {
   public selectedGroup?: IFlowGroupViewModel;
   public selectedConnection?: IFlowConnectionViewModel;
 
-  protected viewModel = signal<IFlowViewModel>({
+  public viewModel = signal<IFlowViewModel>({
     nodes: [],
     groups: [],
     connections: [],
@@ -86,9 +86,7 @@ export class FlowComponent implements OnInit, AfterViewInit {
 
   constructor(
     private flowService: FlowService,
-    private changeDetectorRef: ChangeDetectorRef,
     private customDatasetService: CustomDatasetService,
-    private queryBuilderService: QueryBuilderService,
     private queryBuilderStore: QueryBuilderStore
   ) {}
   ngAfterViewInit(): void {
@@ -98,6 +96,7 @@ export class FlowComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+    this.loadSavedData();
     this.getData();
     this.customDatasetService.getTableList().subscribe((res) => {
       this.tableNames.set(
@@ -107,7 +106,36 @@ export class FlowComponent implements OnInit, AfterViewInit {
       );
     });
   }
-
+  protected loadSavedData(){
+    const savedData=this.queryBuilderStore.getFullJsonData(this.queryBuilderStore.getCurrentQueryIndex());
+    
+    if(savedData && savedData.flowConnections){
+      const groups=JSON.parse(savedData.flowTables) as IFlowGroupStorageModel[];
+      this.flowService.flow={connections:JSON.parse(savedData.flowConnections), groups, nodes:[]}
+      const tableToColumnDataTypeMap=this.queryBuilderStore.getTableToColumnDataTypeMap();
+      let fetchedTableColumnDropdownOptions = this.queryBuilderStore.getFetchedTableColumnDropdownOptions();
+      for(const g of groups){
+        if(!tableToColumnDataTypeMap.has(g.name)){
+          this.setSelectedTableMap({label:g.name, value:g.name});
+          this.customDatasetService
+          .getTableColumnListWithType(g.name)
+          .subscribe((res:any)=>{
+            tableToColumnDataTypeMap.set(g.name, res);
+            const mdata=res.map((column: any) => {
+              return {
+                label: column.ColumnName,
+                value: column.ColumnName,
+              };
+            });
+            fetchedTableColumnDropdownOptions.set(g.name, mdata);
+          })
+        }
+      }
+      this.queryBuilderStore.patchState({tableToColumnDataTypeMap: tableToColumnDataTypeMap});
+      this.queryBuilderStore.patchState({fetchedTableColumnDropdownOptions: fetchedTableColumnDropdownOptions});
+      //console.log(this.queryBuilderStore.getST)
+    }
+  }
   public onCanvasClick(ev: any): void {
     if (ev.target.id === 'f-flow-0') {
       this.selectedGroup = undefined;
@@ -171,14 +199,13 @@ export class FlowComponent implements OnInit, AfterViewInit {
 
   public getData(): void {
     this.viewModel.set(this.flowService.getViewModel());
-    console.log(this.getJoinConditions());
   }
   private currentGroup!: IFlowGroupStorageModel;
   public onNodeAdded(event: FCreateNodeEvent): void {
     this.currentGroup = this.flowService.addGroup(
       event.data,
       event.rect,
-      EGroupType.RightTable
+      this.flowService.flow.groups.length==0?EGroupType.LeftTable: EGroupType.RightTable
     );
 
     this.onDropTable({ label: event.data, value: event.data });
@@ -204,23 +231,16 @@ export class FlowComponent implements OnInit, AfterViewInit {
   }
 
   // table columns logic
+  protected setSelectedTableMap(table: IDropdownData){
+    let selectedTablesMapList = this.queryBuilderStore.getSelectedTablesMapList();
+    let selectedTablesMap = selectedTablesMapList[this.queryBuilderStore.getCurrentQueryIndex()];
+    if (!selectedTablesMap) selectedTablesMap = new Map<string, IDropdownData>();
+    selectedTablesMap.set(table.value, table);
+    selectedTablesMapList[this.queryBuilderStore.getCurrentQueryIndex()] = selectedTablesMap;
+    this.queryBuilderStore.patchState({selectedTablesMapList: selectedTablesMapList});
+  }
   protected onDropTable(table: IDropdownData) {
-    let selectedTablesMapList =
-      this.queryBuilderStore.getSelectedTablesMapList();
-    let selectedTablesMap =
-      selectedTablesMapList[this.queryBuilderStore.getCurrentQueryIndex()];
-    if (!selectedTablesMap)
-      selectedTablesMap = new Map<string, IDropdownData>();
-
-    selectedTablesMap.set(this.currentGroup.name, table);
-
-    selectedTablesMapList[this.queryBuilderStore.getCurrentQueryIndex()] =
-      selectedTablesMap;
-
-    this.queryBuilderStore.patchState({
-      selectedTablesMapList: selectedTablesMapList,
-    });
-
+    this.setSelectedTableMap(table);
     if (table.value) {
       this.fetchTableColumns(
         table.value,
@@ -234,12 +254,9 @@ export class FlowComponent implements OnInit, AfterViewInit {
       .getTableColumnListWithType(tableNameForApiCall)
       .pipe(
         map((res: any) => {
-          let tableToColumnDataTypeMap =
-            this.queryBuilderStore.getTableToColumnDataTypeMap();
+          let tableToColumnDataTypeMap = this.queryBuilderStore.getTableToColumnDataTypeMap();
           tableToColumnDataTypeMap.set(tableName, res);
-          this.queryBuilderStore.patchState({
-            tableToColumnDataTypeMap: tableToColumnDataTypeMap,
-          });
+          this.queryBuilderStore.patchState({tableToColumnDataTypeMap: tableToColumnDataTypeMap,});
           return res.map((column: any) => {
             return {
               label: column.ColumnName,
@@ -255,20 +272,26 @@ export class FlowComponent implements OnInit, AfterViewInit {
   }
 
   private setFetchedTableColumnDropdownOptions(data: IDropdownData[]) {
-    let fetchedTableColumnDropdownOptions =
-      this.queryBuilderStore.getFetchedTableColumnDropdownOptions();
+    let fetchedTableColumnDropdownOptions = this.queryBuilderStore.getFetchedTableColumnDropdownOptions();
     fetchedTableColumnDropdownOptions.set(this.currentGroup.name, data);
-    this.queryBuilderStore.patchState({
-      fetchedTableColumnDropdownOptions: fetchedTableColumnDropdownOptions,
-    });
+    this.queryBuilderStore.patchState({fetchedTableColumnDropdownOptions: fetchedTableColumnDropdownOptions});
     this.currentGroup.columnNames = data.map((it) => it.value).sort();
     this.getData();
   }
   // table columns logic end
-
-  private getJoinConditions(): JoinConfig[] {
+  private saveFlowData(){
+    this.queryBuilderStore.patchStateAllQueries('flowConnections', JSON.stringify(this.flowService.flow.connections));
+    this.queryBuilderStore.patchStateAllQueries('flowTables', JSON.stringify(this.flowService.flow.groups))
+  }
+  public getJoinConditions(): JoinConfig[] {
+    this.saveFlowData();
     const joinConditions: JoinConfig[] = [];
     const map = new Map<string, Record<string, any>[]>();
+    const group = this.flowService.flow.groups.find(it=>it.properties['type']==EGroupType.LeftTable);
+    console.log(group)
+    if(group){
+      this.queryBuilderStore.patchState({sourceTable:group.name})
+    }
     for (const conn of this.flowService.flow.connections) {
       const fromArr = conn.from.split('-');
       const toArr = conn.to.split('-');

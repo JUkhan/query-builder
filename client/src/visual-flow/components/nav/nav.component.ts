@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogRef } from '@angular/material/dialog';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {
   MatBottomSheet,
   MatBottomSheetModule,
@@ -11,10 +12,13 @@ import { QueryBuilderService } from '../../../custom-dataset/query-builder/utils
 import { WhereConditionComponent } from '../../../custom-dataset/query-builder/where-condition/where-condition.component';
 import { OrderByComponent } from '../../../custom-dataset/query-builder/order-by/order-by.component';
 import { SelectContainerComponent } from '../../../custom-dataset/query-builder/select-container/select-container.component';
+import { FlowComponent } from '../flow/flow.component';
+import { PreviewComponent } from '../../../custom-dataset/query-builder/preview/preview.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-flow-nav',
-  imports: [MatButtonModule, MatBottomSheetModule],
+  imports: [MatButtonModule, MatBottomSheetModule, MatSnackBarModule, CommonModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.scss',
 })
@@ -22,14 +26,33 @@ export class NavComponent {
   private buttomSheet = inject(MatBottomSheet);
   private dialogRef = inject(MatDialogRef);
   private queryBuilderStore = inject(QueryBuilderStore);
-  private queryBuilderService = inject(QueryBuilderService);
-
+  //private queryBuilderService = inject(QueryBuilderService);
+  private _snackBar = inject(MatSnackBar);
+  private flowComponent = inject(FlowComponent)
+  
+   
+  public get  isSaveDisabled(){
+    const fullJsonData = this.queryBuilderStore.getFullJsonData(
+      this.queryBuilderStore.getCurrentQueryIndex()
+    );
+    if(!fullJsonData) return true;
+    return !Array.isArray(fullJsonData.selectClauseCols)
+  }
+  
   onSave() {
-    console.log(this.queryBuilderStore.getCurrentQueryIndex());
-    //const generatedQuery = this.queryBuilderService.buildQuery(this.generateBuildQueryPayload());
+    const fullJsonData = this.queryBuilderStore.getFullJsonData(
+      this.queryBuilderStore.getCurrentQueryIndex()
+    );
+    if(!fullJsonData || fullJsonData && !fullJsonData.webQuery){
+      this._snackBar.open('Empty query', '', {duration:3000, verticalPosition:'top'})
+    }
+    
+    if(fullJsonData.webQuery.endsWith('WHERE\r\n')){
+      this._snackBar.open('You need to add filter condition', '', {duration:3000, verticalPosition:'top'})
+    }
     this.dialogRef.close({
       saveClicked: true,
-      query: '', //generatedQuery,
+      query:fullJsonData.webQuery,
       index: this.queryBuilderStore.getCurrentQueryIndex(),
     });
 
@@ -46,7 +69,9 @@ export class NavComponent {
     this.buttomSheet.open(OrderByComponent)
   }
   openPreview(){
-    //this.buttomSheet.open(PreviewC)
-
+    
+    this.queryBuilderStore.patchStateAllQueries('joinConfigs', this.flowComponent.getJoinConditions())
+   
+    this.buttomSheet.open(PreviewComponent)
   }
 }
