@@ -207,7 +207,8 @@ export class CustomDatasetFormComponent implements OnInit, OnDestroy {
             this.emptifyQueryBuilderStore();
         },
         error: (e) => {
-          this._snackBar.open(ConstantService.Message.SAVED_FAIL_TITLE, '', {duration:3000, verticalPosition:'top'});
+          console.log(e)
+          this._snackBar.open(e.error.error, '', {duration:3000, verticalPosition:'top'});
         },
         complete: () => console.info('complete'),
       });

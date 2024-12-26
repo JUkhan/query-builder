@@ -27,3 +27,7 @@
     max-height: 35vh;
     overflow-y: scroll;
 }
+
+.width{
+    width: calc(100% - 200px) !important;
+}

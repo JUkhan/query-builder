@@ -2,6 +2,7 @@ using chatApp.DB;
 using chatApp.Hubs;
 using chatApp.Seed;
 using Microsoft.EntityFrameworkCore;
+using visual_db_server;
 using visual_db_server.Services;
 
 
@@ -64,7 +65,7 @@ app.UseCors("all");
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 // Seed Database
 
 AppDbInitializer.Seed(app);

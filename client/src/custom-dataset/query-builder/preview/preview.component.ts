@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { QueryBuilderStore } from '../utils/query-builder.store';
 import { QueryBuilderService } from '../utils/services/query-builder.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -14,6 +14,7 @@ import { toTitleCase } from '../../../grid/case-conversion';
 import { catchError, map, of, tap } from 'rxjs';
 import { CustomDatasetService } from '../../services/custom-dataset.service';
 import { UtilsService } from '../utils/services/utils.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-preview',
@@ -28,6 +29,7 @@ export class PreviewComponent implements OnInit{
   calculatedColumns: CalculatedColumn[] = [];
   selectClauseCols: SelectClauseCol[] = [];
   previewTableData = of([]);
+  private _snackBar = inject(MatSnackBar);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -78,7 +80,7 @@ private fetchPreviewData() {
             map((res: any) => res.Data.map((it: any, index:any)=>({...it, id:it.id||index}))),
             tap(res=>console.log(res)),
             catchError(err=>{
-              console.log(err.message);
+              this._snackBar.open(err.error.error, '', {duration:3000, verticalPosition:'top'});
               return []
             })
         );

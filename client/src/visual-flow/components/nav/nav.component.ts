@@ -60,7 +60,6 @@ export class NavComponent {
   }
   onOpenFilterConditions(){
     this.buttomSheet.open(WhereConditionComponent);
-    this.queryBuilderStore.QueryBuilderState$.subscribe(res=>console.log(res))
   }
   onOpenSelectColumns(){
     this.buttomSheet.open(SelectContainerComponent)
@@ -72,6 +71,6 @@ export class NavComponent {
     
     this.queryBuilderStore.patchStateAllQueries('joinConfigs', this.flowComponent.getJoinConditions())
    
-    this.buttomSheet.open(PreviewComponent)
+    this.buttomSheet.open(PreviewComponent, {})
   }
 }
