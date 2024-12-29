@@ -101,7 +101,7 @@ export class FlowComponent implements OnInit, AfterViewInit {
     this.customDatasetService.getTableList().subscribe((res) => {
       this.tableNames.set(
         res
-          .filter((it) => it.value !== '__EFMigrationsHistory')
+          .filter((it) => !(it.value == '__EFMigrationsHistory'||it.value.startsWith('customdataset.')))
           .map((it) => it.value)
       );
     });

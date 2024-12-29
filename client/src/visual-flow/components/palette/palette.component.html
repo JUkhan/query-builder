@@ -13,7 +13,7 @@
 </mat-form-field>
 @for (item of fiteredTableNames(); track item) {
   <div class="visual-programming-external-item" fExternalItem [fData]="item">
-    <div>{{ item }}</div>
+    <div [attr.title]="item">{{ item }}</div>
   </div>
 }
 

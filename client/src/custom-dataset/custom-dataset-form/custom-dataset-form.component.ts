@@ -132,6 +132,7 @@ export class CustomDatasetFormComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.emptifyQueryBuilderStore();
   }
 
   private getCustomDatasetById() {
