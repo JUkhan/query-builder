@@ -61,7 +61,7 @@ import { JoinConfig } from '../../../custom-dataset/query-builder/utils/interfac
     NavComponent,
   ],
 })
-export class FlowComponent implements OnInit, AfterViewInit {
+export class FlowComponent implements OnInit {
   getColumns = output<any>();
   tableNames = signal(['Kool']);
   destroy$ = new Subject<void>();
@@ -89,12 +89,7 @@ export class FlowComponent implements OnInit, AfterViewInit {
     private customDatasetService: CustomDatasetService,
     private queryBuilderStore: QueryBuilderStore
   ) {}
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.getData();
-    }, 500);
-  }
-
+  
   public ngOnInit(): void {
     this.loadSavedData();
     this.getData();
@@ -194,7 +189,7 @@ export class FlowComponent implements OnInit, AfterViewInit {
 
   public onInitialized(): void {
     //this.fCanvasComponent.fitToScreen(new Point(40, 40), false);
-    //this.fCanvasComponent.resetScaleAndCenter()
+    this.fCanvasComponent.resetScaleAndCenter();
   }
 
   public getData(): void {
