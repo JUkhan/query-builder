@@ -285,12 +285,12 @@ export class FlowComponent implements OnInit {
       
       const join:Partial<JoinConfig>={};
       join.joinType=conn.name;
-      join.leftTableName=conn.to;
-      join.rightTableName=conn.from;
+      join.leftTableName=conn.from;
+      join.rightTableName=conn.to;
       join.joinConditionFormArray=conn.joinCondistins;
       joinConditions.push(join as any);
     }
-   
+   console.log(joinConditions)
     return joinConditions;
   }
 }

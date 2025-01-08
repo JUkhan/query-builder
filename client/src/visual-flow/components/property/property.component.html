@@ -37,8 +37,8 @@
           <vd-single-select-dropdown 
             [showLabel]="false"
             [defaultDropDownData]="'Select a column'"
-            [selectedData]="join.rightColumn"
-            (selectedItem)="changeRight($event, join)"
+            [selectedData]="join.leftColumn"
+            (selectedItem)="changeLeft($event, join)"
             [inputData]="getTableColumns(selectedConnection()?.from!)"
           />
         </td>
@@ -56,8 +56,8 @@
           <vd-single-select-dropdown 
             [showLabel]="false"
             [defaultDropDownData]="'Select a column'"
-            [selectedData]="join.leftColumn"
-            (selectedItem)="changeLeft($event, join)"
+            [selectedData]="join.rightColumn"
+            (selectedItem)="changeRight($event, join)"
             [inputData]="getTableColumns(selectedConnection()?.to!)"
           />
          
