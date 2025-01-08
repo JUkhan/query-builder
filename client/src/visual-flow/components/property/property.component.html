@@ -14,26 +14,57 @@
 }
 
 @if (selectedConnection()) {
-  <div class="container">
+  <div class="container" style="width:400px">
     <mat-form-field>
       <mat-label>Select join type</mat-label>
       <mat-select (selectionChange)="changeJoin($event.value)" [(value)]="selectedConnection()!.name">
-        <mat-option value="">Empty</mat-option>
         @for (item of joinTypes; track item.value) {
           <mat-option value="{{item.value}}">{{item.label}}</mat-option>
         }
       </mat-select>
     </mat-form-field>
-    
-    <mat-form-field>
-      <mat-label>Select join operator</mat-label>
-      <mat-select (selectionChange)="changeOperator($event.value)" [(value)]="selectedConnection()!.operator">
-        @for (item of operators; track item.value) {
-          <mat-option value="{{item.value}}">{{item.label}}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-    
+    <button mat-stroked-button (click)="addJoinCondition()">Add Join Condition</button>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Left Column</th><th>Operator</th><th>Right Column</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+      @for (join of selectedConnection()?.joinCondistins; track join.id) {
+      <tr class="row">
+        <td>
+          <!-- <stl-single-select-dropdown 
+          [showLabel]="false"
+          [inputData]="getTableColumns(selectedConnection()?.from!)"
+          ></stl-single-select-dropdown>  -->
+        <mat-select (selectionChange)="changeLeft(join, $event.value)" [(value)]="join.leftColumn">
+          @for (item of getTableColumns(selectedConnection()?.from!); track item.value) {
+            <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+          }
+        </mat-select>
+      </td>
+      <td>
+        <mat-select (selectionChange)="changeOperator(join, $event.value)" [(value)]="join.operator">
+          @for (item of operators; track item.value) {
+            <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+          }
+        </mat-select>
+      </td>
+      <td>
+        <mat-select (selectionChange)="changeLeft(join, $event.value)" [(value)]="join.rightColumn">
+          @for (item of getTableColumns(selectedConnection()?.to!); track item.value) {
+            <mat-option value="{{item.value}}">{{item.label}}</mat-option>
+          }
+        </mat-select>
+      </td>
+      <td>
+        <mat-icon title="Delete" (click)="deleteJoinCondition(join)" matTooltip="delete">delete</mat-icon>
+      </td>
+      </tr>
+      }
+    </tbody>
+    </table>
     <button mat-stroked-button (click)="removeConnection()">Remove</button>
   </div>
 }

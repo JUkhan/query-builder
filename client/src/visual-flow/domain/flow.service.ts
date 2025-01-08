@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { FLOW_STORAGE, IFlowStorage } from "./flow.storage";
+import {  IFlowStorage } from "./flow.storage";
 import { MapToNodeViewModelHandler } from "./node/map/map-to-node-view-model.handler";
 import { MapToConnectionViewModelHandler } from "./connection/map/map-to-connection-view-model.handler";
 import { IPoint } from "@foblex/2d";
@@ -7,11 +7,8 @@ import { MoveGroupHandler } from "./group/move-groups/move-group.handler";
 import { MoveNodeHandler } from "./node/move-nodes/move-node.handler";
 import { MoveGroupRequest } from "./group/move-groups/move-group.request";
 import { MoveNodeRequest } from "./node/move-nodes/move-node.request";
-import { AddNewNodeToFlowHandler } from "./node/add-new/add-new-node-to-flow.handler";
-import { AddNewNodeToFlowRequest } from "./node/add-new/add-new-node-to-flow.request";
 import { AddNewGroupToFlowHandler } from "./group/add-new/add-new-group-to-flow.handler";
 import { AddNewGroupToFlowRequest } from "./group/add-new/add-new-group-to-flow.request";
-import { ENodeType } from "./e-node-type";
 import { IFlowViewModel } from "./i-flow-view-model";
 import { ReassignConnectionHandler } from "./connection/reassign/reassign-connection.handler";
 import { ReassignConnectionRequest } from "./connection/reassign/reassign-connection.request";
@@ -26,7 +23,8 @@ import { IFlowGroupStorageModel } from "./group/i-flow-group-storage-model";
 
 @Injectable()
 export class FlowService {
-  public flow: IFlowStorage = {connections:[], groups:[], nodes:[]};
+  public flow: IFlowStorage = {connections:[], groups:[],/* nodes:[]*/};
+
   public changeJoin(
     connection: IFlowConnectionViewModel,
     joinName: string
@@ -37,17 +35,29 @@ export class FlowService {
     if (conn) {
       conn.name = joinName;
     }
+    
+  }
+
+  public changeConnection(
+    connection: IFlowConnectionViewModel
+  ): void {
+    const conn = this.flow.connections.find(
+      (it) => it.from === connection.from && it.to === connection.to
+    );
+    if (conn) {
+      conn.joinCondistins = connection.joinCondistins;
+    }
   }
 
   public changeOperator(
     connection: IFlowConnectionViewModel,
     operatorName: string
   ): void {
-    const conn = this.flow.connections.find(
-      (it) => it.from === connection.from && it.to === connection.to
-    );
-    if (conn) {
-      conn.operator = operatorName;
+    const idx = this.flow.connections.indexOf(connection)
+    if (idx!==-1) {
+      this.flow.connections[idx]={...connection}
+      //conn.operator = operatorName;
+      
     }
   }
 

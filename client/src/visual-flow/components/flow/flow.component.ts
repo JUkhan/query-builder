@@ -1,7 +1,5 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   OnInit,
   output,
@@ -18,31 +16,25 @@ import {
   FCreateConnectionEvent,
   EFResizeHandleType,
 } from '@foblex/flow';
-import { IPoint, Point } from '@foblex/2d';
-import { EGroupType, ENodeType } from '../../domain/e-node-type';
+import { IPoint } from '@foblex/2d';
+import { EGroupType } from '../../domain/e-node-type';
 import { ToolbarComponent } from '../toolbar/toolbar.component';
 import { PaletteComponent } from '../palette/palette.component';
-import { NodeComponent } from '../node/node.component';
 import { FlowService } from '../../domain/flow.service';
 import { IFlowViewModel } from '../../domain/i-flow-view-model';
 import { GroupComponent } from '../group/group.component';
 import { IFlowGroupStorageModel } from '../../domain/group/i-flow-group-storage-model';
-import { IFlowNodeStorageModel } from '../../domain/node/i-flow-node-storage-model';
 import { IFlowConnectionViewModel } from '../../domain/connection/i-flow-connection-view-model';
 import { PropertyComponent } from '../property/property.component';
 import { IFlowGroupViewModel } from '../../domain/group/i-flow-group-view-model';
 import { CustomDatasetService } from '../../../custom-dataset/services/custom-dataset.service';
 import { NavComponent } from '../nav/nav.component';
 import { DotEnum } from '../../../custom-dataset/query-builder/utils/enums';
-import { QueryBuilderService } from '../../../custom-dataset/query-builder/utils/services/query-builder.service';
-import {
-  QueryBuilderState,
-  QueryBuilderStore,
-} from '../../../custom-dataset/query-builder/utils/query-builder.store';
+import { QueryBuilderStore } from '../../../custom-dataset/query-builder/utils/query-builder.store';
 import { IDropdownData } from '../../../custom-dataset/custom-dataset.constants';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/internal/Subject';
-import { JoinConfig } from '../../../custom-dataset/query-builder/utils/interfaces';
+import { JoinCondition, JoinConfig } from '../../../custom-dataset/query-builder/utils/interfaces';
 
 @Component({
   selector: 'visual-flow',
@@ -56,7 +48,7 @@ import { JoinConfig } from '../../../custom-dataset/query-builder/utils/interfac
     PropertyComponent,
     ToolbarComponent,
     PaletteComponent,
-    NodeComponent,
+   // NodeComponent,
     GroupComponent,
     NavComponent,
   ],
@@ -106,7 +98,7 @@ export class FlowComponent implements OnInit {
     
     if(savedData && savedData.flowConnections){
       const groups=JSON.parse(savedData.flowTables) as IFlowGroupStorageModel[];
-      this.flowService.flow={connections:JSON.parse(savedData.flowConnections), groups, nodes:[]}
+      this.flowService.flow={connections:JSON.parse(savedData.flowConnections), groups,/* nodes:[]*/}
       const tableToColumnDataTypeMap=this.queryBuilderStore.getTableToColumnDataTypeMap();
       let fetchedTableColumnDropdownOptions = this.queryBuilderStore.getFetchedTableColumnDropdownOptions();
       for(const g of groups){
@@ -132,7 +124,7 @@ export class FlowComponent implements OnInit {
     }
   }
   public onCanvasClick(ev: any): void {
-    if (ev.target.id === 'f-flow-0') {
+    if (ev.target.id.startsWith('f-flow-')){
       this.selectedGroup = undefined;
       this.selectedConnection = undefined;
     }
@@ -166,9 +158,10 @@ export class FlowComponent implements OnInit {
     }
   }
 
-  public changeOperator(oprator: string): void {
+  public changeConnection(joinConditions:JoinCondition[]): void {
     if (this.selectedConnection) {
-      this.flowService.changeOperator(this.selectedConnection, oprator);
+      this.selectedConnection.joinCondistins=joinConditions;
+      this.flowService.changeConnection(this.selectedConnection);
       this.getData();
     }
   }
@@ -194,6 +187,7 @@ export class FlowComponent implements OnInit {
 
   public getData(): void {
     this.viewModel.set(this.flowService.getViewModel());
+    this.saveFlowData();
   }
   private currentGroup!: IFlowGroupStorageModel;
   public onNodeAdded(event: FCreateNodeEvent): void {
@@ -281,40 +275,21 @@ export class FlowComponent implements OnInit {
   public getJoinConditions(): JoinConfig[] {
     this.saveFlowData();
     const joinConditions: JoinConfig[] = [];
-    const map = new Map<string, Record<string, any>[]>();
     const group = this.flowService.flow.groups.find(it=>it.properties['type']==EGroupType.LeftTable);
-    console.log(group)
+    
     if(group){
       this.queryBuilderStore.patchState({sourceTable:group.name})
     }
     for (const conn of this.flowService.flow.connections) {
-      const fromArr = conn.from.split('-');
-      const toArr = conn.to.split('-');
-      const key = `${fromArr[0]}${toArr[0]}`;
-      const record = {
-        from: fromArr,
-        to: toArr,
-        joinType: conn.name,
-        operator: conn.operator,
-      };
-      if (map.has(key)) map.get(key)?.push(record);
-      else map.set(key, [record]);
+      
+      const join:Partial<JoinConfig>={};
+      join.joinType=conn.name;
+      join.leftTableName=conn.from;
+      join.rightTableName=conn.to;
+      join.joinConditionFormArray=conn.joinCondistins;
+      joinConditions.push(join as any);
     }
-    for (const records of map.values()){
-        const joinRecord=records.find(it=>it['joinType'])
-        const join:Partial<JoinConfig>={};
-        if(joinRecord){
-          join.joinType=joinRecord['joinType'];
-          join.leftTableName=joinRecord['from'][0];
-          join.rightTableName=joinRecord['to'][0]
-        }
-        join.joinConditionFormArray=[];
-        for(const it of records){
-          join.joinConditionFormArray.push({leftColumn:it['from'][2],operator:it['operator'], rightColumn:it['to'][2]})
-        }
-        joinConditions.push(join as any);
-    }
-    
+   
     return joinConditions;
   }
 }

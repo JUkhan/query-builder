@@ -16,7 +16,7 @@ export class MapToConnectionViewModelHandler implements IHandler<void, IFlowConn
 
   public handle(): IFlowConnectionViewModel[] {
     return this.flow.connections.map((x) => {
-      return this.mapConnection(x, this.getFromNode(x), this.getToNode(x));
+      return this.mapConnection(x, /*this.getFromNode(x), this.getToNode(x)*/);
     });
   }
   
@@ -26,14 +26,14 @@ export class MapToConnectionViewModelHandler implements IHandler<void, IFlowConn
   },{} as Record<string, string>)
 
   private mapConnection(
-    connection: IFlowConnectionStorageModel, fromNode: IFlowNodeStorageModel, toNode: IFlowNodeStorageModel
+    connection: IFlowConnectionStorageModel,/* fromNode: IFlowNodeStorageModel, toNode: IFlowNodeStorageModel*/
   ): IFlowConnectionViewModel {
     
     return {
       ...connection,
       color1:GROUP_CONFIGURATION[EGroupType.LeftTable].color, 
       color2:GROUP_CONFIGURATION[EGroupType.RightTable].color,
-      text: connection.name||this.operators[connection.operator],
+      text: connection.name/*||this.operators[connection.operator]*/,
     };
   }
 
@@ -56,7 +56,9 @@ export class MapToConnectionViewModelHandler implements IHandler<void, IFlowConn
 
   private getNodes(fromToId: string): IFlowNodeStorageModel[] {
     const arr=fromToId.split('-');
+    console.log(fromToId, arr)
     const groupId=`${arr[0]}-${arr[1]}`
-    return this.flow.nodes.filter(n=>n.groupId===groupId);
+    //return this.flow.nodes.filter(n=>n.groupId===groupId);
+    return [];
   }
 }

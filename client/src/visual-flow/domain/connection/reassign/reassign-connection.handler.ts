@@ -29,10 +29,12 @@ export class ReassignConnectionHandler implements IHandler<ReassignConnectionReq
 
   private createConnection(outputId: string, inputId: string): IFlowConnectionStorageModel {
     return {
+      id:Number(new Date()),
       from: outputId,
       operator:'=',
       to: inputId,
-      name:'JOIN'
+      name:'JOIN',
+      joinCondistins:[]
     };
   }
 }

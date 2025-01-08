@@ -13,7 +13,8 @@ export class MapToNodeViewModelHandler implements IHandler<void, IFlowNodeViewMo
   }
 
   public handle(): IFlowNodeViewModel[] {
-    return this.flow.nodes=this.flow.groups.flatMap(g=>this.getNodes(g));
+    //return this.flow.nodes=this.flow.groups.flatMap(g=>this.getNodes(g));
+    return [];
   }
   private getNodes(group: IFlowGroupStorageModel){
     let posY = group.position.y + 35;

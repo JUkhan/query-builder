@@ -1,6 +1,7 @@
 import { FormGroup } from '@angular/forms';
 
 export interface JoinCondition {
+    id?:number;
     leftColumn: string;
     operator: string;
     rightColumn: string;

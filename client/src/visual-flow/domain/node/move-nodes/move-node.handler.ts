@@ -10,10 +10,10 @@ export class MoveNodeHandler implements IHandler<MoveNodeRequest> {
   }
 
   public handle(request: MoveNodeRequest): void {
-    const node = this.flow.nodes.find((x) => x.id === request.id);
+    /*const node = this.flow.nodes.find((x) => x.id === request.id);
     if (!node) {
       throw new Error(`Node with id ${ request.id } not found`);
     }
-    node.position = request.position;
+    node.position = request.position;*/
   }
 }

@@ -7,7 +7,7 @@ import { IFlowNodeStorageModel } from './node/i-flow-node-storage-model';
 export interface IFlowStorage {
 
   groups: IFlowGroupStorageModel[];
-  nodes: IFlowNodeStorageModel[];
+  //nodes: IFlowNodeStorageModel[];
 
   connections: IFlowConnectionStorageModel[];
 }
@@ -17,8 +17,8 @@ export const FLOW_STORAGE: IFlowStorage = {
     {id:'g1', name:'Table1', columnNames:['id','name','age','email','address1_amar_tumar_r_karo_noi'], position:{x:100, y:100}, properties:{type:'left-table'},size:{width:171, height:232}},
     {id:'g2', name:'Table2', columnNames:['id','name'], position:{x:500, y:100}, properties:{type:'right-table'},size:{width:171, height:232}},
   ],
-  nodes:[],
-  connections:[{from:'g1-id-0', to:'g2-id-0', name:'JOIN', operator:'='},{from:'g1-name-1', to:'g2-name-1', name:'', operator:'!='}]
+  //nodes:[],
+  connections:[{from:'g1-id-0', to:'g2-id-0', name:'JOIN', operator:'=', joinCondistins:[], id:1},{id:2, from:'g1-name-1', to:'g2-name-1', name:'', operator:'!=', joinCondistins:[]},]
 }
 const abc={
 
