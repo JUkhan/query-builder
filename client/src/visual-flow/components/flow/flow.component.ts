@@ -280,12 +280,13 @@ export class FlowComponent implements OnInit {
     if(group){
       this.queryBuilderStore.patchState({sourceTable:group.name})
     }
+    
     for (const conn of this.flowService.flow.connections) {
       
       const join:Partial<JoinConfig>={};
       join.joinType=conn.name;
-      join.leftTableName=conn.from;
-      join.rightTableName=conn.to;
+      join.leftTableName=conn.to;
+      join.rightTableName=conn.from;
       join.joinConditionFormArray=conn.joinCondistins;
       joinConditions.push(join as any);
     }

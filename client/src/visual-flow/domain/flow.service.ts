@@ -80,7 +80,7 @@ export class FlowService {
   public removeGroup(group: IFlowGroupViewModel):void{
     this.flow.groups = this.flow.groups.filter(it=>it.id!==group.id)
       this.flow.connections = this.flow.connections.filter(
-        (it) => !(it.from.startsWith(group.id) || it.to.startsWith(group.id))
+        (it) => !(it.from===group.name || it.to===group.name)
       );
   }
 
