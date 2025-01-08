@@ -14,8 +14,8 @@
 }
 
 @if (selectedConnection()) {
-  <div class="container" style="width:400px">
-    <mat-form-field>
+  <div class="container" style="width:400px;display: inline-block;">
+    <mat-form-field aria-expanded="true">
       <mat-label>Select join type</mat-label>
       <mat-select (selectionChange)="changeJoin($event.value)" [(value)]="selectedConnection()!.name">
         @for (item of joinTypes; track item.value) {
@@ -34,33 +34,37 @@
       @for (join of selectedConnection()?.joinCondistins; track join.id) {
       <tr class="row">
         <td>
-          <!-- <stl-single-select-dropdown 
-          [showLabel]="false"
-          [inputData]="getTableColumns(selectedConnection()?.from!)"
-          ></stl-single-select-dropdown>  -->
-        <mat-select (selectionChange)="changeLeft(join, $event.value)" [(value)]="join.leftColumn">
-          @for (item of getTableColumns(selectedConnection()?.from!); track item.value) {
-            <mat-option value="{{item.value}}">{{item.label}}</mat-option>
-          }
-        </mat-select>
-      </td>
-      <td>
-        <mat-select (selectionChange)="changeOperator(join, $event.value)" [(value)]="join.operator">
-          @for (item of operators; track item.value) {
-            <mat-option value="{{item.value}}">{{item.label}}</mat-option>
-          }
-        </mat-select>
-      </td>
-      <td>
-        <mat-select (selectionChange)="changeLeft(join, $event.value)" [(value)]="join.rightColumn">
-          @for (item of getTableColumns(selectedConnection()?.to!); track item.value) {
-            <mat-option value="{{item.value}}">{{item.label}}</mat-option>
-          }
-        </mat-select>
-      </td>
-      <td>
-        <mat-icon title="Delete" (click)="deleteJoinCondition(join)" matTooltip="delete">delete</mat-icon>
-      </td>
+          <vd-single-select-dropdown 
+            [showLabel]="false"
+            [defaultDropDownData]="'Select a column'"
+            [selectedData]="join.rightColumn"
+            (selectedItem)="changeRight($event, join)"
+            [inputData]="getTableColumns(selectedConnection()?.from!)"
+          />
+        </td>
+        <td>
+          <vd-single-select-dropdown 
+            [showLabel]="false"
+            [defaultDropDownData]="'Select an operator'"
+            [selectedData]="join.operator"
+            (selectedItem)="changeOperator($event, join)"
+            [inputData]="operators"
+          />
+         
+        </td>
+        <td>
+          <vd-single-select-dropdown 
+            [showLabel]="false"
+            [defaultDropDownData]="'Select a column'"
+            [selectedData]="join.leftColumn"
+            (selectedItem)="changeLeft($event, join)"
+            [inputData]="getTableColumns(selectedConnection()?.to!)"
+          />
+         
+        </td>
+        <td>
+          <mat-icon title="Delete" (click)="deleteJoinCondition(join)" matTooltip="delete">delete</mat-icon>
+        </td>
       </tr>
       }
     </tbody>

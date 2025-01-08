@@ -24,13 +24,13 @@ import { CustomDatasetModule } from '../../../custom-dataset/custom-dataset.modu
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmacionComponent } from '../../../grid/confirm/confirm.component';
 import { ConstantService } from '../../../services';
-import { SingleSelectDropdownComponent } from '../../../custom-dataset/single-select-dropdown/single-select-dropdown.component';
+import { SingleSelectDropdownComponent } from '../single-select-dropdown/single-select-dropdown.component';
 
 @Component({
   selector: 'visual-programming-property',
   templateUrl: './property.component.html',
   styleUrls: [ './property.component.scss' ],
-  imports:[MatSelectModule, MatFormFieldModule, MatButtonModule, MatIconModule,],
+  imports:[MatSelectModule, MatFormFieldModule, MatButtonModule, MatIconModule, SingleSelectDropdownComponent],
   viewProviders:[AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -54,14 +54,16 @@ export class PropertyComponent {
     this.flowComponent.changeJoin(ev)
   }
 
-  public changeOperator(item:JoinCondition, value:string): void{
-   
+  public changeOperator(val:any, join:JoinCondition): void{
+    join.operator=val.value;
     this.flowComponent.changeConnection(this.selectedConnection()?.joinCondistins!)
   }
-  public changeLeft(item:JoinCondition, value:string): void{
+  public changeLeft(val:any, join:JoinCondition): void{
+    join.leftColumn=val.value;
     this.flowComponent.changeConnection(this.selectedConnection()?.joinCondistins!)
   }
-  public changeRight(item:JoinCondition, value:string): void{
+  public changeRight(val:any, join:JoinCondition): void{
+    join.rightColumn=val.value;
     this.flowComponent.changeConnection(this.selectedConnection()?.joinCondistins!)
   }
 
@@ -107,9 +109,9 @@ export class PropertyComponent {
         ...it,
         joinCondistins: [...it.joinCondistins, {
           id: Number(new Date()),
-          leftColumn: '',
-          operator: '',
-          rightColumn: ''
+          leftColumn: '-1',
+          operator: '-1',
+          rightColumn: '-1'
         }]
       } 
     });
